@@ -1,0 +1,16 @@
+---
+import type { DiagramEdge } from "../data/architecture";
+
+type Props = { edge: DiagramEdge; index: number };
+
+const { edge, index } = Astro.props;
+---
+
+<path d={edge.path} class="dg-edge"></path>
+{
+  edge.hasPacket && (
+    <circle r="4" class="dg-packet">
+      <animateMotion dur="2.4s" begin={`-${(index * 0.35).toFixed(2)}s`} repeatCount="indefinite" path={edge.path} />
+    </circle>
+  )
+}

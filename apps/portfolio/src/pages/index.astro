@@ -1,0 +1,141 @@
+---
+import ArchitectureDiagram from "../components/ArchitectureDiagram.astro";
+import { title as diagramTitle } from "../data/architecture";
+import { experience, links, projects, skills, writing } from "../data/profile";
+import Layout from "../layouts/Layout.astro";
+
+const btnBase = "inline-flex min-h-10 cursor-pointer items-center justify-center gap-2 rounded-xl px-4 py-2 text-center text-sm font-medium leading-tight transition-colors";
+const btnPrimary = `${btnBase} bg-primary text-primary-foreground hover:bg-primary-hover`;
+const btnOutline = `${btnBase} border border-border-strong bg-surface text-foreground hover:bg-button-hover`;
+const linkText = "inline-flex min-h-8 items-center underline decoration-foreground/30 underline-offset-4 hover:decoration-foreground";
+const iconClass = "size-4 shrink-0";
+---
+
+<Layout>
+  <header class="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+    <a href="#" class="inline-flex min-h-8 items-center text-sm font-semibold text-foreground">Nguyen Quang Vinh</a>
+    <nav class="hidden items-center gap-6 text-sm text-muted md:flex" aria-label="Main">
+      <a class="hover:text-foreground" href="#projects">Projects</a>
+      <a class="hover:text-foreground" href="#experience">Experience</a>
+      <a class="hover:text-foreground" href="#skills">Skills</a>
+      <a class="hover:text-foreground" href="#writing">Writing</a>
+    </nav>
+  </header>
+
+  <main class="mx-auto w-full max-w-6xl px-4 sm:px-6">
+    <section class="grid items-center gap-8 py-8 lg:grid-cols-12 lg:gap-10 lg:py-12">
+      <div class="grid gap-5 lg:col-span-5">
+        <p class="text-sm font-medium text-primary">Backend Engineer moving into Cloud &amp; Platform</p>
+        <h1 class="text-3xl font-semibold tracking-tight text-balance text-foreground sm:text-4xl">Java backends for banking and SaaS, taken all the way to production.</h1>
+        <p class="max-w-prose text-base leading-relaxed text-muted">3 years with Spring Boot, Kafka, and PostgreSQL across interbank payments, digital signature, and multi-tenant SaaS. I also set up and release production environments on AWS ECS Fargate.</p>
+        <div class:list={["grid gap-3 sm:max-w-sm", links.cv ? "grid-cols-2" : "grid-cols-3"]}>
+          {
+            links.cv && (
+              <a class={btnPrimary} href={links.cv}>
+                <svg class={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="m7 10 5 5 5-5"></path></svg>
+                Download CV
+              </a>
+            )
+          }
+          <a class={links.cv ? btnOutline : btnPrimary} href={links.email}>
+            <svg class={iconClass} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+            Email
+          </a>
+          <a class={btnOutline} href={links.github}>GitHub</a>
+          <a class={btnOutline} href={links.linkedin}>LinkedIn</a>
+        </div>
+      </div>
+      <div class="min-w-0 lg:col-span-7">
+        <figure class="rounded-2xl border border-border bg-surface p-4 sm:p-5">
+          <ArchitectureDiagram />
+          <figcaption class="mt-4 text-xs leading-relaxed text-pretty text-muted">{diagramTitle}. Simplified, no client internals.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="projects" class="grid scroll-mt-4 gap-5 py-10">
+      <h2 class="text-lg font-semibold text-foreground">Selected projects</h2>
+      <div class="grid gap-3 lg:grid-cols-3">
+        {
+          projects.map((project) => (
+            <article data-reveal class="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-4 sm:p-5">
+              <div class="grid gap-1">
+                <h3 class="text-base font-semibold text-foreground">{project.name}</h3>
+                <p class="text-sm text-pretty text-foreground">{project.domain}</p>
+                <p class="text-xs text-muted">{project.role}</p>
+              </div>
+              <div class="flex-1">
+                <ul class="grid gap-2 text-sm leading-relaxed text-pretty text-muted">
+                  {project.points.map((point) => <li>{point}</li>)}
+                </ul>
+              </div>
+              <ul class="flex flex-wrap gap-2">
+                {project.tags.map((tag) => <li class="rounded-lg bg-background px-2 py-1 text-xs font-medium text-foreground">{tag}</li>)}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="grid gap-10 py-10 lg:grid-cols-2 lg:gap-12">
+      <div id="experience" class="grid scroll-mt-4 content-start gap-5">
+        <h2 class="text-lg font-semibold text-foreground">Experience</h2>
+        <ol class="grid gap-5">
+          {
+            experience.map((job) => (
+              <li class="grid gap-1">
+                <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <h3 class="text-sm font-semibold text-foreground">{job.company}</h3>
+                  <span class="text-xs text-muted">{job.date}</span>
+                </div>
+                <p class="text-sm text-foreground">{job.title}</p>
+                <p class="text-sm leading-relaxed text-muted">{job.note}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <div id="skills" class="grid scroll-mt-4 content-start gap-5">
+        <h2 class="text-lg font-semibold text-foreground">Skills</h2>
+        <dl class="grid gap-4">
+          {
+            skills.map(([group, items]) => (
+              <div class="grid gap-1">
+                <dt class="text-sm font-semibold text-foreground">{group}</dt>
+                <dd class="text-sm leading-relaxed text-pretty text-muted">{items}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <section id="writing" class="grid scroll-mt-4 gap-5 py-10">
+      <h2 class="text-lg font-semibold text-foreground">Writing</h2>
+      <div class="grid gap-3 md:grid-cols-2">
+        {
+          writing.map((site) => (
+            <div data-reveal class="flex items-start justify-between gap-4 rounded-2xl border border-border bg-surface p-4 sm:p-5">
+              <div class="grid gap-1">
+                <h3 class="text-base font-semibold text-foreground">{site.name}</h3>
+                <p class="text-sm text-pretty text-muted">{site.description}</p>
+                <p class="text-xs text-muted">{site.host}</p>
+              </div>
+              <span class="shrink-0 whitespace-nowrap rounded-lg bg-background px-2 py-1 text-xs font-medium text-foreground">Coming soon</span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <footer class="flex flex-col gap-3 border-t border-border-strong py-6 text-sm text-muted md:flex-row md:items-center md:justify-between">
+      <p class="text-pretty">Built with Astro and Tailwind CSS. Deployed to Cloudflare Workers with GitHub Actions.</p>
+      <p class="flex shrink-0 flex-wrap items-center gap-4">
+        <a class={linkText} href={links.email}>Email</a>
+        <a class={linkText} href={links.github}>GitHub</a>
+        <a class={linkText} href={links.linkedin}>LinkedIn</a>
+      </p>
+    </footer>
+  </main>
+</Layout>

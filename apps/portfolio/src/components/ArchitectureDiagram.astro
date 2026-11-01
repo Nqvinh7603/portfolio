@@ -1,0 +1,51 @@
+---
+import { desktop, mobileLanes, title } from "../data/architecture";
+import type { DiagramEdge as Edge, DiagramNode as Node } from "../data/architecture";
+import DiagramEdge from "./DiagramEdge.astro";
+import DiagramNode from "./DiagramNode.astro";
+
+const MOBILE_WIDTH = 300;
+const MOBILE_GAP = 22;
+
+let cursorY = 0;
+const mobileLabels: { y: number; text: string }[] = [];
+const mobileNodes: Node[] = [];
+const mobileEdges: Edge[] = [];
+
+for (const lane of mobileLanes) {
+  cursorY += 16;
+  mobileLabels.push({ y: cursorY, text: lane.label });
+  cursorY += 10;
+  lane.steps.forEach((step, index) => {
+    const height = step.sub ? 54 : 44;
+    mobileNodes.push({ x: 0, y: cursorY, w: MOBILE_WIDTH, h: height, ...step });
+    cursorY += height;
+    if (index < lane.steps.length - 1) {
+      mobileEdges.push({ path: `M${MOBILE_WIDTH / 2} ${cursorY}V${cursorY + MOBILE_GAP}`, hasPacket: true });
+      cursorY += MOBILE_GAP;
+    }
+  });
+  cursorY += 16;
+}
+---
+
+<svg viewBox={`0 0 ${desktop.width} ${desktop.height}`} class="hidden h-auto w-full md:block" role="img" aria-label={title} data-diagram>
+  <rect x={desktop.group.x} y={desktop.group.y} width={desktop.group.w} height={desktop.group.h} rx="14" class="dg-group"></rect>
+  <text x={desktop.group.x + 12} y={desktop.group.y + 18} class="dg-label">{desktop.group.label}</text>
+  {desktop.labels.map((label) => <text x={label.x} y={label.y} class="dg-label">{label.text}</text>)}
+  {desktop.edges.map((edge, index) => <DiagramEdge edge={edge} index={index} />)}
+  {desktop.nodes.map((node) => <DiagramNode node={node} />)}
+</svg>
+
+<svg viewBox={`0 0 ${MOBILE_WIDTH} ${cursorY}`} class="h-auto w-full md:hidden" role="img" aria-label={title} data-diagram>
+  {mobileLabels.map((label) => <text x="0" y={label.y} class="dg-label">{label.text}</text>)}
+  {mobileEdges.map((edge, index) => <DiagramEdge edge={edge} index={index} />)}
+  {mobileNodes.map((node) => <DiagramNode node={node} />)}
+</svg>
+
+<script is:inline>
+  // SMIL không tự theo prefers-reduced-motion nên phải dừng bằng tay.
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    for (const svg of document.querySelectorAll("[data-diagram]")) svg.pauseAnimations();
+  }
+</script>

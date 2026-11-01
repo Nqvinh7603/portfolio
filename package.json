@@ -1,0 +1,10 @@
+{
+  "name": "vinhnq.com",
+  "private": true,
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev": "npm run dev -w @vinhnq/portfolio",
+    "build": "npm run build -w @vinhnq/portfolio",
+    "preview": "npm run preview -w @vinhnq/portfolio"
+  }
+}
