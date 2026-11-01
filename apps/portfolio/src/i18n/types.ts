@@ -7,6 +7,7 @@ export type Project = {
   domain: string;
   role: string;
   meta: string;
+  url?: string;
   problem?: string;
   points: string[];
   decisions?: { title: string; body: string }[];
@@ -21,7 +22,7 @@ export type Content = {
   name: { first: string; last: string; full: string };
   meta: { title: string; description: string };
   nav: { projects: string; experience: string; resume: string; contact: string; menu: string; theme: string; language: string; skip: string; source: string };
-  actions: { downloadCv: string; viewProjects: string; caseStudy: string; allProjects: string; fullExperience: string; print: string; backToProjects: string; home: string; viewArchitecture: string; seeSimulation: string };
+  actions: { downloadCv: string; viewProjects: string; caseStudy: string; visitSite: string; allProjects: string; fullExperience: string; print: string; backToProjects: string; home: string; viewArchitecture: string; seeSimulation: string };
   cvFile: string;
   hero: { eyebrow: string; statement: string; scroll: string };
   labels: { about: string; simulation: string; work: string; experience: string; contact: string };

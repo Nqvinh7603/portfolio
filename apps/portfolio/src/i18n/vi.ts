@@ -7,7 +7,7 @@ export const vi: Content = {
     description: "Java Backend Engineer. Kinh nghiệm thanh toán liên ngân hàng, chữ ký số và SaaS đa tenant, từ phát triển đến vận hành production.",
   },
   nav: { projects: "Dự án", experience: "Kinh nghiệm", resume: "CV", contact: "Liên hệ", menu: "Mở menu", theme: "Đổi giao diện sáng tối", language: "View in English", skip: "Chuyển đến nội dung", source: "Mã nguồn trang" },
-  actions: { downloadCv: "Tải CV", viewProjects: "Xem dự án", caseStudy: "Đọc case study", allProjects: "Tất cả 8 dự án", fullExperience: "Toàn bộ kinh nghiệm và học vấn", print: "In", backToProjects: "Tất cả dự án", home: "Về trang chủ", viewArchitecture: "Xem kiến trúc", seeSimulation: "Xem luồng này chạy" },
+  actions: { downloadCv: "Tải CV", viewProjects: "Xem dự án", caseStudy: "Đọc case study", visitSite: "Xem trang web", allProjects: "Tất cả 9 dự án", fullExperience: "Toàn bộ kinh nghiệm và học vấn", print: "In", backToProjects: "Tất cả dự án", home: "Về trang chủ", viewArchitecture: "Xem kiến trúc", seeSimulation: "Xem luồng này chạy" },
   cvFile: "/NguyenQuangVinh_CV_VI.pdf",
   hero: {
     eyebrow: "Backend Engineer",
@@ -15,7 +15,7 @@ export const vi: Content = {
     scroll: "Cuộn để khám phá",
   },
   labels: { about: "Hồ sơ", simulation: "Demo trực tiếp", work: "Case study", experience: "Sự nghiệp", contact: "Kết nối" },
-  facts: [["3 năm", "kinh nghiệm backend"], ["8 dự án", "ngân hàng, fintech, SaaS"], ["2 nền tảng", "phụ trách release production"], ["Giải thưởng 2025", "Highest Potential Employee"]],
+  facts: [["3 năm", "kinh nghiệm backend"], ["9 dự án", "ngân hàng, fintech, SaaS"], ["2 nền tảng", "phụ trách release production"], ["Giải thưởng 2025", "Highest Potential Employee"]],
   about: {
     title: "Về *tôi*",
     body: "Tôi đi lên từ ngân hàng và fintech, nơi giao dịch trùng hay callback bị mất đều gây hậu quả thật. Tôi cũng tự thiết lập và release môi trường production cho các service của mình.",
@@ -51,7 +51,7 @@ export const vi: Content = {
       release: { label: "Release", logs: ["GitLab CI đẩy image lên ECR", "ECS Fargate deploy image mới", "Release hoàn tất"] },
     },
   },
-  projectsPage: { title: "Dự án", intro: "Tám dự án về ngân hàng, chữ ký số và SaaS. Thông tin khách hàng chỉ dừng ở mức kỹ thuật chung." },
+  projectsPage: { title: "Dự án", intro: "Chín dự án về ngân hàng, chữ ký số và SaaS. Thông tin khách hàng chỉ dừng ở mức kỹ thuật chung." },
   caseStudy: { problem: "Bài toán", architecture: "Kiến trúc", delivered: "Công việc đã làm", decisions: "Quyết định chính", stack: "Công nghệ", simplified: "Sơ đồ đã giản lược, không có chi tiết nội bộ của khách hàng." },
   resume: {
     title: "CV",
@@ -73,10 +73,26 @@ export const vi: Content = {
   notFound: { title: "Không tìm thấy đường dẫn này.", body: "Trang bạn tìm không tồn tại hoặc đã được chuyển đi." },
   jobs: [
     { company: "Wala-ICT", title: "Backend Software Engineer", date: "04/2026 – Hiện tại", note: "Phát triển sản phẩm cho khách hàng Hàn Quốc. Backend chính của một SaaS đa tenant, phụ trách release production cho các nền tảng đang chạy.", projects: "BitBuild · S-Space · Miribom" },
+    { company: "Straffico", title: "Backend Engineer", date: "08/2025 – Hiện tại", note: "Nền tảng quản lý dự án và chi phí cho doanh nghiệp xây dựng. Phát triển tính năng backend và quy trình release production blue-green.", projects: "Straffico" },
     { company: "Unit Technology Corporation", title: "Backend Software Engineer, R&D", date: "11/2024 – 03/2026", note: "Giải pháp chữ ký số và ngân hàng. Highest Potential Employee 2025, Most Productive Team 2025.", projects: "Signature Hub · Paperless · Easy Doc · ACH Gateway · JCanary Core" },
     { company: "Laptrinhjavaweb", title: "Backend Developer", date: "09/2023 – 10/2024", note: "Phát triển backend Java.", projects: "Java · Spring Boot" },
   ],
   projects: [
+    {
+      slug: "straffico", name: "Straffico", company: "Straffico", domain: "Quản lý dự án và chi phí cho doanh nghiệp xây dựng", role: "Backend Engineer", meta: "Dự án nhóm · Java 21",
+      problem: "Doanh nghiệp xây dựng cần công trường, kho, kế toán và quản lý cùng làm việc trên một bộ số liệu.",
+      points: [
+        "Xây dựng deploy bằng GitHub Actions cho dev và prod: build JAR trên runner, rồi release bằng blue-green switch không downtime.",
+        "Thêm khóa deploy để hai repository không bao giờ release cùng lúc lên một server.",
+        "Đối soát số dư quỹ thực tế và số dư hệ thống, đồng thời xây dựng API phân tích, report builder và lịch nguồn lực.",
+        "Thêm thông báo Web Push, audit hoạt động người dùng và mã yêu cầu hỗ trợ liên kết giữa response với log.",
+      ],
+      decisions: [
+        { title: "Release bằng blue-green switch", body: "Bản mới chạy song song với bản đang hoạt động rồi mới chuyển traffic, nên release production không cần thời gian dừng." },
+        { title: "Tách số dư thực tế và số dư hệ thống", body: "Hai số dư được lưu riêng rồi đối soát, nên chênh lệch luôn nhìn thấy được thay vì bị ghi đè." },
+      ],
+      stack: ["Java 21", "MyBatis", "Redis", "GitHub Actions"],
+    },
     {
       slug: "s-space", name: "S-Space", company: "Wala-ICT", domain: "SaaS quản lý studio Pilates và fitness", role: "Backend Engineer", meta: "Team 5 người · đang chạy tại s-space.co.kr",
       problem: "Một nền tảng microservices đang chạy thật cần môi trường production có tài liệu rõ ràng và quy trình release đáng tin cậy.",

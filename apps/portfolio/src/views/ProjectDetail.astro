@@ -21,6 +21,7 @@ const subheading = "text-lg font-semibold text-foreground";
     <h1 class="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl" style={`view-transition-name: project-${project.slug}`}>{project.name}</h1>
     <p class="text-lg text-pretty text-foreground">{project.domain}</p>
     <p class="text-sm text-pretty text-muted">{project.role} · {project.meta}</p>
+    {project.url && <div><a class={`${linkText} text-sm font-medium text-foreground`} href={project.url} target="_blank" rel="noopener">{content.actions.visitSite}<Icon name="arrowUpRight" /></a></div>}
   </div>
   {
     project.problem && (

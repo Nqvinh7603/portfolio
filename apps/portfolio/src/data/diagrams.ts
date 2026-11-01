@@ -14,6 +14,33 @@ export type Diagram = {
 };
 
 export const diagrams: Record<string, Diagram> = {
+  straffico: {
+    title: "Straffico blue-green release",
+    width: 720,
+    height: 330,
+    groups: [],
+    labels: [{ x: 20, y: 24, text: "Request" }, { x: 20, y: 240, text: "Release" }],
+    nodes: [
+      { x: 20, y: 60, w: 130, h: 64, title: "Admin web", sub: "React" },
+      { x: 230, y: 40, w: 200, h: 64, title: "API · blue", sub: "live version", isKey: true },
+      { x: 230, y: 130, w: 200, h: 64, title: "API · green", sub: "new version" },
+      { x: 530, y: 40, w: 170, h: 44, title: "Redis" },
+      { x: 530, y: 100, w: 170, h: 44, title: "Database" },
+      { x: 20, y: 250, w: 150, h: 64, title: "GitHub Actions", sub: "builds the JAR" },
+      { x: 230, y: 250, w: 200, h: 64, title: "bg-switch", sub: "one deploy at a time" },
+    ],
+    edges: [
+      { path: "M150 92H190V72H230", hasPacket: true },
+      { path: "M430 72H480V62H530" },
+      { path: "M480 72V122H530", hasPacket: true },
+      { path: "M170 282H230", hasPacket: true },
+      { path: "M330 250V194", hasPacket: true },
+    ],
+    lanes: [
+      { label: "Request", steps: [{ title: "Admin web", sub: "React" }, { title: "API · blue", sub: "live version", isKey: true }, { title: "Redis and database" }] },
+      { label: "Release", steps: [{ title: "GitHub Actions", sub: "builds the JAR" }, { title: "bg-switch", sub: "one deploy at a time" }, { title: "API · green", sub: "new version" }] },
+    ],
+  },
   "s-space": {
     title: "S-Space production architecture",
     width: 720,

@@ -7,7 +7,7 @@ export const en: Content = {
     description: "Java Backend Engineer. Interbank payments, digital signature, and multi-tenant SaaS, taken all the way to production.",
   },
   nav: { projects: "Projects", experience: "Experience", resume: "Résumé", contact: "Contact", menu: "Open menu", theme: "Toggle theme", language: "Xem bằng tiếng Việt", skip: "Skip to content", source: "Site source" },
-  actions: { downloadCv: "Download CV", viewProjects: "View projects", caseStudy: "Read case study", allProjects: "All 8 projects", fullExperience: "Full experience & education", print: "Print", backToProjects: "All projects", home: "Back home", viewArchitecture: "View architecture", seeSimulation: "Watch this flow run" },
+  actions: { downloadCv: "Download CV", viewProjects: "View projects", caseStudy: "Read case study", visitSite: "Visit site", allProjects: "All 9 projects", fullExperience: "Full experience & education", print: "Print", backToProjects: "All projects", home: "Back home", viewArchitecture: "View architecture", seeSimulation: "Watch this flow run" },
   cvFile: "/NguyenQuangVinh_CV_EN.pdf",
   hero: {
     eyebrow: "Backend Engineer",
@@ -15,7 +15,7 @@ export const en: Content = {
     scroll: "Scroll to explore",
   },
   labels: { about: "Profile", simulation: "Live demo", work: "Case studies", experience: "Career", contact: "Say hello" },
-  facts: [["3 years", "backend engineering"], ["8 projects", "banking, fintech, SaaS"], ["2 platforms", "released to production"], ["2025 award", "Highest Potential Employee"]],
+  facts: [["3 years", "backend engineering"], ["9 projects", "banking, fintech, SaaS"], ["2 platforms", "released to production"], ["2025 award", "Highest Potential Employee"]],
   about: {
     title: "About *me*",
     body: "My background is banking and fintech, where duplicates and lost callbacks have a real cost. I also set up and release the production environments my services run on.",
@@ -51,7 +51,7 @@ export const en: Content = {
       release: { label: "Release", logs: ["GitLab CI pushes the image to ECR", "ECS Fargate deploys the new image", "Release finished"] },
     },
   },
-  projectsPage: { title: "Projects", intro: "Eight projects across banking, digital signature, and SaaS. Client details stay at the level of public engineering practice." },
+  projectsPage: { title: "Projects", intro: "Nine projects across banking, digital signature, and SaaS. Client details stay at the level of public engineering practice." },
   caseStudy: { problem: "The problem", architecture: "Architecture", delivered: "What I delivered", decisions: "Key decisions", stack: "Stack", simplified: "Simplified view, no client internals." },
   resume: {
     title: "Résumé",
@@ -73,10 +73,26 @@ export const en: Content = {
   notFound: { title: "This route doesn't resolve.", body: "The page you are looking for does not exist or has moved." },
   jobs: [
     { company: "Wala-ICT", title: "Backend Software Engineer", date: "04/2026 – Present", note: "Software products for Korean clients. Main backend engineer of a multi-tenant SaaS, responsible for production releases of live platforms.", projects: "BitBuild · S-Space · Miribom" },
+    { company: "Straffico", title: "Backend Engineer", date: "08/2025 – Present", note: "Project and cost control platform for construction companies. Backend features and the blue-green production release pipeline.", projects: "Straffico" },
     { company: "Unit Technology Corporation", title: "Backend Software Engineer, R&D", date: "11/2024 – 03/2026", note: "Digital signature and banking solutions. Highest Potential Employee 2025, Most Productive Team 2025.", projects: "Signature Hub · Paperless · Easy Doc · ACH Gateway · JCanary Core" },
     { company: "Laptrinhjavaweb", title: "Backend Developer", date: "09/2023 – 10/2024", note: "Java backend development.", projects: "Java · Spring Boot" },
   ],
   projects: [
+    {
+      slug: "straffico", name: "Straffico", company: "Straffico", domain: "Project and cost control for construction companies", role: "Backend Engineer", meta: "Team project · Java 21",
+      problem: "Construction companies needed sites, warehouses, accounting, and management working from the same numbers.",
+      points: [
+        "Built the GitHub Actions deployment for dev and prod: the JAR is built on the runner, then a blue-green switch releases it with zero downtime.",
+        "Added a deploy lock so two repositories never release to the same server at once.",
+        "Reconciled actual and system fund balances, and built analytics, report builder, and resource schedule APIs.",
+        "Added Web Push notifications, user activity audit, and support request IDs correlated across responses and logs.",
+      ],
+      decisions: [
+        { title: "Release with a blue-green switch", body: "The new version starts beside the live one, and traffic switches only then, so production releases need no downtime window." },
+        { title: "Keep actual and system balances separate", body: "Actual and system fund balances are tracked as two values and reconciled, so a difference stays visible instead of being overwritten." },
+      ],
+      stack: ["Java 21", "MyBatis", "Redis", "GitHub Actions"],
+    },
     {
       slug: "s-space", name: "S-Space", company: "Wala-ICT", domain: "Pilates & fitness studio SaaS", role: "Backend Engineer", meta: "Team of 5 · live at s-space.co.kr",
       problem: "A live microservices platform needed a documented production environment and dependable releases.",
