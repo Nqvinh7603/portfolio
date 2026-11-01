@@ -1,5 +1,5 @@
 ---
-import type { DiagramNode } from "../data/architecture";
+import type { DiagramNode } from "../data/diagrams";
 
 type Props = { node: DiagramNode };
 
@@ -8,7 +8,7 @@ const centerX = node.x + node.w / 2;
 const centerY = node.y + node.h / 2;
 ---
 
-<rect x={node.x} y={node.y} width={node.w} height={node.h} rx="10" class:list={["dg-node", node.isKey && "dg-node-key"]}></rect>
+<rect x={node.x} y={node.y} width={node.w} height={node.h} rx="8" class:list={["dg-node", node.isKey && "dg-node-key"]}></rect>
 {
   node.sub ? (
     <>

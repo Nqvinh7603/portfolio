@@ -1,0 +1,68 @@
+---
+import ArchitectureDiagram from "../components/ArchitectureDiagram.astro";
+import Icon from "../components/Icon.astro";
+import { diagrams } from "../data/diagrams";
+import { getContent, localePath } from "../i18n";
+import type { Locale, Project } from "../i18n/types";
+import { eyebrow, linkText } from "../styles/classes";
+
+type Props = { locale: Locale; project: Project };
+
+const { locale, project } = Astro.props;
+const content = getContent(locale);
+const labels = content.caseStudy;
+const subheading = "text-lg font-semibold text-foreground";
+---
+
+<article class="mx-auto grid max-w-4xl gap-10 py-12 lg:py-16">
+  <div class="grid gap-4">
+    <div><a class={`${linkText} text-sm text-muted`} href={localePath(locale, "/projects/")}>{content.actions.backToProjects}</a></div>
+    <p class={eyebrow}>{project.company}</p>
+    <h1 class="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl" style={`view-transition-name: project-${project.slug}`}>{project.name}</h1>
+    <p class="text-lg text-pretty text-foreground">{project.domain}</p>
+    <p class="text-sm text-pretty text-muted">{project.role} · {project.meta}</p>
+  </div>
+  {
+    project.problem && (
+      <section class="grid gap-3">
+        <h2 class={subheading}>{labels.problem}</h2>
+        <p class="max-w-prose text-base leading-relaxed text-pretty text-muted">{project.problem}</p>
+      </section>
+    )
+  }
+  {
+    diagrams[project.slug] && (
+      <section class="grid gap-3">
+        <h2 class={subheading}>{labels.architecture}</h2>
+        <ArchitectureDiagram id={project.slug} />
+        <p class="text-sm text-pretty text-muted">{labels.simplified}</p>
+      </section>
+    )
+  }
+  <section class="grid gap-3">
+    <h2 class={subheading}>{labels.delivered}</h2>
+    <ul class="grid gap-3 text-base leading-relaxed text-pretty text-muted">
+      {project.points.map((point) => <li>{point}</li>)}
+    </ul>
+  </section>
+  {
+    project.decisions && (
+      <section class="grid gap-4">
+        <h2 class={subheading}>{labels.decisions}</h2>
+        <div class="grid gap-3 md:grid-cols-2">
+          {project.decisions.map((decision) => (
+            <div data-spotlight data-tilt class="glass grid content-start gap-2 rounded-2xl border border-border-strong p-4 sm:p-5">
+              <h3 class="text-base font-semibold text-balance text-foreground">{decision.title}</h3>
+              <p class="text-base leading-relaxed text-pretty text-muted">{decision.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+  <section class="grid gap-3">
+    <h2 class={subheading}>{labels.stack}</h2>
+    <p class="text-sm text-muted">{project.stack.join(" · ")}</p>
+  </section>
+  <div><a class={`${linkText} text-sm font-medium text-foreground`} href={localePath(locale, "/projects/")}>{content.actions.backToProjects}<Icon name="arrowRight" /></a></div>
+</article>

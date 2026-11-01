@@ -1,0 +1,186 @@
+---
+import { layouts, steps } from "../data/simulation";
+import type { ScenarioName } from "../data/simulation";
+import { getContent } from "../i18n";
+import type { Locale } from "../i18n/types";
+
+type Props = { locale: Locale };
+
+const { simulation } = getContent(Astro.props.locale);
+const names: ScenarioName[] = ["request", "lost", "release"];
+const logs = Object.fromEntries(names.map((name) => [name, simulation.scenarios[name].logs]));
+const initialLogs = simulation.scenarios.request.logs.slice(-4);
+---
+
+<figure class="glass min-w-0 rounded-2xl border border-border-strong p-4 sm:p-6" data-simulation data-steps={JSON.stringify(steps)} data-logs={JSON.stringify(logs)}>
+  <div class="mb-5 flex gap-4 shadow-[inset_0_-1px_0_var(--tab-rail)]" role="group" aria-label={simulation.label}>
+    {
+      names.map((name, index) => (
+        <button type="button" data-scenario={name} aria-pressed={index === 0 ? "true" : "false"} class="relative box-content h-10 cursor-pointer whitespace-nowrap pb-px text-sm font-medium text-muted hover:text-foreground after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 aria-pressed:text-foreground aria-pressed:after:bg-primary">
+          {simulation.scenarios[name].label}
+        </button>
+      ))
+    }
+  </div>
+
+  {
+    (["desktop", "mobile"] as const).map((layoutName) => {
+      const layout = layouts[layoutName];
+      return (
+        <svg viewBox={`0 0 ${layout.width} ${layout.height}`} class:list={["h-auto w-full", layoutName === "desktop" ? "hidden md:block" : "md:hidden"]} role="img" aria-label={simulation.caption} data-sim-svg>
+          {layout.group && (
+            <>
+              <rect x={layout.group.x} y={layout.group.y} width={layout.group.w} height={layout.group.h} rx="12" class="dg-group" />
+              <text x={layout.group.x + 12} y={layout.group.y + 18} class="dg-label">{layout.group.label}</text>
+            </>
+          )}
+          {Object.entries(layout.edges).map(([id, path]) => <path d={path} class="dg-edge" data-edge={id} />)}
+          {layout.nodes.map((node) => (
+            <>
+              <rect x={node.x} y={node.y} width={node.w} height={node.h} rx="8" class="dg-node" data-node={node.id} />
+              {node.sub ? (
+                <>
+                  <text x={node.x + node.w / 2} y={node.y + node.h / 2 - 3} text-anchor="middle" class="dg-title">{node.title}</text>
+                  <text x={node.x + node.w / 2} y={node.y + node.h / 2 + 15} text-anchor="middle" class="dg-sub">{node.sub}</text>
+                </>
+              ) : (
+                <text x={node.x + node.w / 2} y={node.y + node.h / 2 + 5} text-anchor="middle" class="dg-title">{node.title}</text>
+              )}
+            </>
+          ))}
+          <circle r="5" class="dg-packet" data-packet cx="-20" cy="-20" />
+        </svg>
+      );
+    })
+  }
+
+  <ol class="mt-4 grid min-h-[6.5rem] content-start gap-1 border-t border-border-strong pt-3 text-sm text-muted" data-sim-log>
+    {initialLogs.map((line) => <li>{line}</li>)}
+  </ol>
+  <figcaption class="mt-2 text-sm text-pretty text-muted">{simulation.caption}</figcaption>
+</figure>
+
+<script>
+  type Step = { edge?: string; isReverse?: boolean; node: string; isFailed?: boolean };
+
+  const MOVE_MS = 700;
+  const STEP_PAUSE_MS = 420;
+  const SCENARIO_PAUSE_MS = 1800;
+  const VISIBLE_LOG_LINES = 4;
+
+  const root = document.querySelector<HTMLElement>("[data-simulation]");
+
+  if (root) {
+    const steps: Record<string, Step[]> = JSON.parse(root.dataset.steps ?? "{}");
+    const logs: Record<string, string[]> = JSON.parse(root.dataset.logs ?? "{}");
+    const names = Object.keys(steps);
+    const buttons = [...root.querySelectorAll<HTMLButtonElement>("[data-scenario]")];
+    const logList = root.querySelector<HTMLElement>("[data-sim-log]")!;
+    const isReducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    let runId = 0;
+    let isAutoPlay = !isReducedMotion;
+    let isVisible = false;
+    let current = names[0];
+
+    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+    const activeSvg = () => [...root.querySelectorAll<SVGSVGElement>("[data-sim-svg]")].find((svg) => svg.getBoundingClientRect().width > 0);
+
+    function resetDiagram() {
+      for (const element of root!.querySelectorAll(".is-active, .is-failed")) element.classList.remove("is-active", "is-failed");
+      for (const packet of root!.querySelectorAll("[data-packet]")) packet.setAttribute("cx", "-20");
+    }
+
+    function markNode(step: Step) {
+      for (const element of root!.querySelectorAll(".dg-node.is-active")) element.classList.remove("is-active");
+      // Bước bình thường tiếp theo nghĩa là sự cố đã được xử lý.
+      if (!step.isFailed) for (const element of root!.querySelectorAll(".is-failed")) element.classList.remove("is-failed");
+      for (const node of root!.querySelectorAll(`[data-node="${step.node}"]`)) node.classList.add(step.isFailed ? "is-failed" : "is-active");
+    }
+
+    function writeLog(line: string, isFailed?: boolean) {
+      const item = document.createElement("li");
+      item.textContent = line;
+      if (isFailed) item.className = "text-rose-700 dark:text-rose-400";
+      logList.append(item);
+      while (logList.children.length > VISIBLE_LOG_LINES) logList.firstElementChild?.remove();
+    }
+
+    function movePacket(step: Step, id: number) {
+      const svg = activeSvg();
+      const path = step.edge ? svg?.querySelector<SVGPathElement>(`[data-edge="${step.edge}"]`) : null;
+      const packet = svg?.querySelector<SVGCircleElement>("[data-packet]");
+      if (!path || !packet) return Promise.resolve();
+
+      packet.classList.remove("is-failed");
+      const length = path.getTotalLength();
+      // Callback bị mất dừng giữa đường, không tới được service.
+      const stopAt = step.isFailed ? 0.5 : 1;
+
+      return new Promise<void>((resolve) => {
+        const startedAt = performance.now();
+        const frame = (now: number) => {
+          if (id !== runId) return resolve();
+          const progress = Math.min((now - startedAt) / MOVE_MS, 1) * stopAt;
+          const point = path.getPointAtLength((step.isReverse ? 1 - progress : progress) * length);
+          packet.setAttribute("cx", String(point.x));
+          packet.setAttribute("cy", String(point.y));
+          if (progress < stopAt) return void requestAnimationFrame(frame);
+          if (step.isFailed) {
+            packet.classList.add("is-failed");
+            path.classList.add("is-failed");
+          }
+          resolve();
+        };
+        requestAnimationFrame(frame);
+      });
+    }
+
+    function showScenarioStatically(name: string) {
+      resetDiagram();
+      logList.replaceChildren();
+      logs[name].forEach((line, index) => writeLog(line, steps[name][index].isFailed));
+    }
+
+    async function play(name: string) {
+      const id = ++runId;
+      current = name;
+      for (const button of buttons) button.setAttribute("aria-pressed", String(button.dataset.scenario === name));
+
+      if (isReducedMotion) return showScenarioStatically(name);
+
+      resetDiagram();
+      logList.replaceChildren();
+      for (const [index, step] of steps[name].entries()) {
+        await movePacket(step, id);
+        if (id !== runId) return;
+        markNode(step);
+        writeLog(logs[name][index], step.isFailed);
+        await wait(STEP_PAUSE_MS);
+        if (id !== runId) return;
+      }
+      await wait(SCENARIO_PAUSE_MS);
+      if (id !== runId || !isVisible) return;
+      play(isAutoPlay ? names[(names.indexOf(name) + 1) % names.length] : name);
+    }
+
+    for (const button of buttons) {
+      button.addEventListener("click", () => {
+        isAutoPlay = false;
+        play(button.dataset.scenario ?? names[0]);
+      });
+    }
+
+    // Chỉ chạy khi đang nhìn thấy, để không tốn tài nguyên lúc đã cuộn đi hay đổi tab.
+    new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible && !isReducedMotion) play(current);
+      else runId++;
+    }).observe(root);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) runId++;
+      else if (isVisible && !isReducedMotion) play(current);
+    });
+  }
+</script>

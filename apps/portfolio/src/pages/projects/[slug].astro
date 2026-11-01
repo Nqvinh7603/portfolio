@@ -1,0 +1,16 @@
+---
+import { getContent } from "../../i18n";
+import type { Project } from "../../i18n/types";
+import Layout from "../../layouts/Layout.astro";
+import ProjectDetail from "../../views/ProjectDetail.astro";
+
+export function getStaticPaths() {
+  return getContent("en").projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+const { project } = Astro.props as { project: Project };
+---
+
+<Layout locale="en" path={`/projects/${project.slug}/`} title={project.name} description={project.problem ?? project.domain}>
+  <ProjectDetail locale="en" project={project} />
+</Layout>

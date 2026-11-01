@@ -1,0 +1,85 @@
+---
+import Icon from "../components/Icon.astro";
+import { getContent } from "../i18n";
+import type { Locale } from "../i18n/types";
+import { btnOutline, btnPrimary, eyebrow } from "../styles/classes";
+
+type Props = { locale: Locale };
+
+const content = getContent(Astro.props.locale);
+const { resume, experience } = content;
+const sectionHeading = "border-b border-border-strong pb-2 text-sm font-semibold text-foreground print:text-xs";
+---
+
+<div class="mx-auto grid max-w-4xl gap-8 py-12 print:max-w-none print:gap-5 print:py-0 lg:py-16">
+  <header class="grid gap-4 print:gap-1">
+    <p class={`${eyebrow} print:hidden`}>{content.hero.eyebrow}</p>
+    <h1 class="text-4xl font-semibold tracking-tight text-foreground print:text-2xl">{content.name.full}</h1>
+    <p class="text-sm text-foreground">Backend Software Engineer (Java)</p>
+    <p class="text-sm text-pretty text-muted print:text-xs">{resume.note}</p>
+    <div class="flex flex-wrap gap-3 print:hidden" data-resume-actions>
+      <a class={btnPrimary} href={content.cvFile} download><Icon name="download" />{content.actions.downloadCv}</a>
+      <button type="button" class={btnOutline} data-print><Icon name="printer" />{content.actions.print}</button>
+    </div>
+  </header>
+  <section class="grid gap-3 print:gap-1.5">
+    <h2 class={sectionHeading}>{resume.profileTitle}</h2>
+    <p class="text-sm leading-relaxed text-pretty text-muted print:text-xs">{resume.profile}</p>
+  </section>
+  <section class="grid gap-3 print:gap-1.5">
+    <h2 class={sectionHeading}>{resume.skillsTitle}</h2>
+    <dl class="grid gap-2 print:gap-1">
+      {
+        resume.skills.map(([label, items]) => (
+          <div class="grid gap-1 sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-4 print:grid-cols-[120px_minmax(0,1fr)] print:gap-3 print:text-xs">
+            <dt class="text-sm font-medium text-foreground print:text-xs">{label}</dt>
+            <dd class="text-sm leading-relaxed text-pretty text-muted print:text-xs">{items}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+  <section class="grid gap-5 print:gap-3">
+    <h2 class={sectionHeading}>{resume.experienceTitle}</h2>
+    {
+      content.jobs.map((job) => {
+        const jobProjects = content.projects.filter((project) => project.company === job.company);
+        return (
+          <div class="grid gap-3 print:gap-1.5">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h3 class="text-base font-semibold text-foreground print:text-sm">{job.company} · {job.title}</h3>
+              <span class="text-sm text-muted">{job.date}</span>
+            </div>
+            {jobProjects.map((project) => (
+              <div class="grid gap-1 break-inside-avoid">
+                <h4 class="text-sm font-medium text-foreground print:text-xs">{project.name} · {project.domain}</h4>
+                <p class="text-sm text-muted">{project.role} · {project.meta}</p>
+                <ul class="grid list-disc gap-1 pl-4 text-sm leading-relaxed text-pretty text-muted print:gap-0 print:text-xs">
+                  {project.points.map((point) => <li>{point}</li>)}
+                </ul>
+              </div>
+            ))}
+            {jobProjects.length === 0 && <p class="text-sm text-muted print:text-xs">{job.note}</p>}
+          </div>
+        );
+      })
+    }
+  </section>
+  <section class="grid gap-3 break-inside-avoid print:gap-1.5">
+    <h2 class={sectionHeading}>{resume.educationTitle}</h2>
+    <ul class="grid gap-2 print:gap-1">
+      {
+        experience.education.map((item) => (
+          <li class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <span class="text-sm text-foreground print:text-xs">{item.school} · {item.detail}</span>
+            <span class="text-sm text-muted">{item.date}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</div>
+
+<script is:inline>
+  document.querySelector("[data-print]")?.addEventListener("click", () => print());
+</script>

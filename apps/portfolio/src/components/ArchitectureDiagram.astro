@@ -1,18 +1,25 @@
 ---
-import { desktop, mobileLanes, title } from "../data/architecture";
-import type { DiagramEdge as Edge, DiagramNode as Node } from "../data/architecture";
+import { diagrams } from "../data/diagrams";
+import type { DiagramEdge as Edge, DiagramNode as Node } from "../data/diagrams";
 import DiagramEdge from "./DiagramEdge.astro";
 import DiagramNode from "./DiagramNode.astro";
+import Icon from "./Icon.astro";
+
+type Props = { id: string; collapseLabel?: string };
+
+const { id, collapseLabel } = Astro.props;
 
 const MOBILE_WIDTH = 300;
 const MOBILE_GAP = 22;
+
+const diagram = diagrams[id];
 
 let cursorY = 0;
 const mobileLabels: { y: number; text: string }[] = [];
 const mobileNodes: Node[] = [];
 const mobileEdges: Edge[] = [];
 
-for (const lane of mobileLanes) {
+for (const lane of diagram.lanes) {
   cursorY += 16;
   mobileLabels.push({ y: cursorY, text: lane.label });
   cursorY += 10;
@@ -29,23 +36,42 @@ for (const lane of mobileLanes) {
 }
 ---
 
-<svg viewBox={`0 0 ${desktop.width} ${desktop.height}`} class="hidden h-auto w-full md:block" role="img" aria-label={title} data-diagram>
-  <rect x={desktop.group.x} y={desktop.group.y} width={desktop.group.w} height={desktop.group.h} rx="14" class="dg-group"></rect>
-  <text x={desktop.group.x + 12} y={desktop.group.y + 18} class="dg-label">{desktop.group.label}</text>
-  {desktop.labels.map((label) => <text x={label.x} y={label.y} class="dg-label">{label.text}</text>)}
-  {desktop.edges.map((edge, index) => <DiagramEdge edge={edge} index={index} />)}
-  {desktop.nodes.map((node) => <DiagramNode node={node} />)}
-</svg>
-
-<svg viewBox={`0 0 ${MOBILE_WIDTH} ${cursorY}`} class="h-auto w-full md:hidden" role="img" aria-label={title} data-diagram>
-  {mobileLabels.map((label) => <text x="0" y={label.y} class="dg-label">{label.text}</text>)}
-  {mobileEdges.map((edge, index) => <DiagramEdge edge={edge} index={index} />)}
-  {mobileNodes.map((node) => <DiagramNode node={node} />)}
-</svg>
-
-<script is:inline>
-  // SMIL không tự theo prefers-reduced-motion nên phải dừng bằng tay.
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    for (const svg of document.querySelectorAll("[data-diagram]")) svg.pauseAnimations();
+<figure data-spotlight data-tilt class="glass min-w-0 rounded-2xl border border-border-strong p-4 sm:p-5">
+  <svg viewBox={`0 0 ${diagram.width} ${diagram.height}`} class="hidden h-auto w-full md:block" role="img" aria-label={diagram.title} data-diagram>
+    {
+      diagram.groups.map((group) => (
+        <>
+          <rect x={group.x} y={group.y} width={group.w} height={group.h} rx="12" class="dg-group" />
+          <text x={group.x + 12} y={group.y + 18} class="dg-label">{group.label}</text>
+        </>
+      ))
+    }
+    {diagram.labels.map((label) => <text x={label.x} y={label.y} class="dg-label">{label.text}</text>)}
+    {diagram.edges.map((edge, index) => <DiagramEdge edge={edge} index={index} />)}
+    {diagram.nodes.map((node) => <DiagramNode node={node} />)}
+  </svg>
+  {
+    collapseLabel ? (
+      <details class="group md:hidden">
+        <summary class="flex min-h-10 cursor-pointer list-none items-center justify-between gap-3 text-sm font-medium text-foreground [&::-webkit-details-marker]:hidden">
+          {collapseLabel}
+          <span class="text-muted transition-transform group-open:rotate-90"><Icon name="arrowRight" /></span>
+        </summary>
+        <div class="mt-3">
+          <svg viewBox={`0 0 ${MOBILE_WIDTH} ${cursorY}`} class="h-auto w-full md:hidden" role="img" aria-label={diagram.title} data-diagram>
+    {mobileLabels.map((label) => <text x="0" y={label.y} class="dg-label">{label.text}</text>)}
+    {mobileEdges.map((edge, index) => <DiagramEdge edge={edge} index={index} />)}
+    {mobileNodes.map((node) => <DiagramNode node={node} />)}
+  </svg>
+        </div>
+      </details>
+    ) : (
+      <svg viewBox={`0 0 ${MOBILE_WIDTH} ${cursorY}`} class="h-auto w-full md:hidden" role="img" aria-label={diagram.title} data-diagram>
+    {mobileLabels.map((label) => <text x="0" y={label.y} class="dg-label">{label.text}</text>)}
+    {mobileEdges.map((edge, index) => <DiagramEdge edge={edge} index={index} />)}
+    {mobileNodes.map((node) => <DiagramNode node={node} />)}
+  </svg>
+    )
   }
-</script>
+  <figcaption class:list={["mt-4 text-sm text-pretty text-muted", collapseLabel && "hidden md:block"]}>{diagram.title}</figcaption>
+</figure>

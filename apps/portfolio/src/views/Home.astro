@@ -1,0 +1,167 @@
+---
+import ArchitectureDiagram from "../components/ArchitectureDiagram.astro";
+import Icon from "../components/Icon.astro";
+import Marquee from "../components/Marquee.astro";
+import Simulation from "../components/Simulation.astro";
+import Title from "../components/Title.astro";
+import { getContent, localePath } from "../i18n";
+import type { Locale } from "../i18n/types";
+import { btnOutline, btnPrimary, linkText, sectionLabel, sectionTitle } from "../styles/classes";
+
+type Props = { locale: Locale };
+
+const { locale } = Astro.props;
+const content = getContent(locale);
+const featured = content.projects.filter((project) => project.decisions);
+const { labels } = content;
+const rail = [
+  { id: "top", label: "00" },
+  { id: "about", label: "01" },
+  { id: "simulation", label: "02" },
+  { id: "work", label: "03" },
+  { id: "experience", label: "04" },
+  { id: "contact", label: "05" },
+];
+const heroName = `${content.name.first} *${content.name.last}*`;
+---
+
+<nav data-rail class="glass fixed top-1/2 right-4 z-30 hidden -translate-y-1/2 rounded-2xl border border-border-strong px-2.5 py-2 xl:block print:hidden" aria-label="Sections">
+  {rail.map((item) => <a href={`#${item.id}`}>{item.label}</a>)}
+</nav>
+
+<section id="top" data-globe="0 -1.98 1.55 1" class="grid min-h-[calc(100svh-64px)] content-center justify-items-center gap-6 pb-36 text-center sm:gap-7">
+  <Title as="h1" text={heroName} hasReveal={false} class="text-[clamp(3.25rem,10vw,8.75rem)] leading-[1.02] font-light tracking-[-0.03em] text-foreground" />
+  <p data-enter style="--d: 400ms" class="text-2xl font-light text-foreground sm:text-4xl" data-scramble>{content.hero.eyebrow}</p>
+  <p data-enter style="--d: 550ms" class="max-w-2xl text-base leading-relaxed text-pretty text-muted sm:text-lg">{content.hero.statement}</p>
+  <div data-enter style="--d: 700ms" class="grid w-full max-w-sm grid-cols-2 gap-3 sm:flex sm:w-auto sm:max-w-none sm:flex-wrap sm:justify-center">
+    <a data-magnet class={`${btnPrimary} col-span-2`} href={content.cvFile} download><Icon name="download" />{content.actions.downloadCv}</a>
+    <a data-magnet class={btnOutline} href="#work">{content.actions.viewProjects}<Icon name="arrowRight" /></a>
+    <a data-magnet class={btnOutline} href="https://github.com/Nqvinh7603">GitHub</a>
+  </div>
+  <a href="#about" data-enter style="--d: 900ms" class="scroll-cue glass inline-flex size-11 items-center justify-center rounded-full border border-border-strong text-foreground" aria-label={content.hero.scroll}><Icon name="arrowDown" /></a>
+</section>
+
+<Marquee />
+
+<section id="about" data-globe="1.2 0 1.05 0.9" class="grid min-h-svh scroll-mt-20 content-center gap-10 py-20 lg:py-28">
+  <p class={sectionLabel}><span class="text-primary">01</span><span data-scramble>{labels.about}</span></p>
+  <div class="grid max-w-2xl gap-6">
+    <img data-reveal src="/avatar.jpg" alt={content.name.full} width="128" height="128" loading="lazy" class="size-28 rounded-full object-cover ring-1 ring-border-strong sm:size-32" />
+    <Title text={content.about.title} class={sectionTitle} />
+    <p data-reveal class="text-lg leading-relaxed text-pretty text-muted">{content.about.body}</p>
+  </div>
+  <dl data-reveal class="grid max-w-3xl grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
+    {
+      content.facts.map(([value, label]) => (
+        <div class="grid content-start gap-1">
+          <dt class="text-xl font-medium text-foreground" data-count>{value}</dt>
+          <dd class="text-sm text-pretty text-muted">{label}</dd>
+        </div>
+      ))
+    }
+  </dl>
+  <dl class="grid max-w-3xl">
+    {
+      content.about.focus.map(([label, items]) => (
+        <div data-reveal class="grid gap-1 border-b border-border-strong py-4 sm:grid-cols-[120px_minmax(0,1fr)] sm:gap-4">
+          <dt class="text-sm font-medium text-foreground">{label}</dt>
+          <dd class="text-base leading-relaxed text-pretty text-muted">{items}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>
+
+<section id="simulation" data-globe="-1.4 0.1 1 0.22" class="grid scroll-mt-20 gap-10 py-20 lg:grid-cols-12 lg:gap-12 lg:py-28">
+  <div class="grid content-start gap-6 lg:col-span-4">
+    <p class={sectionLabel}><span class="text-primary">02</span><span data-scramble>{labels.simulation}</span></p>
+    <Title text={content.simulation.title} class={sectionTitle} />
+    <p data-reveal class="text-lg leading-relaxed text-pretty text-muted">{content.simulation.intro}</p>
+  </div>
+  <div data-reveal class="min-w-0 lg:col-span-8"><Simulation locale={locale} /></div>
+</section>
+
+<section id="work" data-globe="1.25 0.2 1.1 0.1" class="grid scroll-mt-20 gap-14 py-20 lg:gap-24 lg:py-28">
+  <div class="grid gap-6">
+    <p class={sectionLabel}><span class="text-primary">03</span><span data-scramble>{labels.work}</span></p>
+    <Title text={content.work.title} class={sectionTitle} />
+  </div>
+  {
+    featured.map((project, index) => {
+      const href = localePath(locale, `/projects/${project.slug}/`);
+      return (
+        <article data-reveal class="grid items-center gap-6 lg:grid-cols-12 lg:gap-12">
+          <div class:list={["grid gap-4 lg:col-span-5", index % 2 && "lg:order-2"]}>
+            <p class="accent w-fit text-3xl">0{index + 1}</p>
+            <div class="grid gap-1">
+              <h3 class="text-3xl font-light tracking-tight text-foreground" style={`view-transition-name: project-${project.slug}`}><a class="transition-colors hover:text-primary" href={href}>{project.name}</a></h3>
+              <p class="text-base text-foreground">{project.domain}</p>
+              <p class="text-sm text-pretty text-muted">{project.role} · {project.meta}</p>
+            </div>
+            <ul class="grid gap-2 text-base leading-relaxed text-pretty text-muted">
+              {project.points.slice(0, 3).map((point) => <li>{point}</li>)}
+            </ul>
+            <ul class="flex flex-wrap gap-2 text-sm text-foreground">
+              {project.stack.slice(0, 3).map((item) => <li class="glass rounded-full border border-border-strong px-3 py-1">{item}</li>)}
+            </ul>
+            <div><a class={`${linkText} text-sm font-medium text-foreground`} href={href}>{content.actions.caseStudy}<Icon name="arrowRight" /></a></div>
+          </div>
+          <div class:list={["min-w-0 lg:col-span-7", index % 2 && "lg:order-1"]}>
+            {
+              project.slug === "s-space" ? (
+                <div class="glass grid gap-5 rounded-2xl border border-border-strong p-4 sm:p-6">
+                  {project.decisions?.map((decision) => (
+                    <div class="grid gap-2">
+                      <h4 class="text-lg font-medium text-balance text-foreground">{decision.title}</h4>
+                      <p class="text-base leading-relaxed text-pretty text-muted">{decision.body}</p>
+                    </div>
+                  ))}
+                  <div><a class={`${linkText} text-sm font-medium text-foreground`} href="#simulation">{content.actions.seeSimulation}<Icon name="arrowRight" /></a></div>
+                </div>
+              ) : (
+                <ArchitectureDiagram id={project.slug} collapseLabel={content.actions.viewArchitecture} />
+              )
+            }
+          </div>
+        </article>
+      );
+    })
+  }
+  <div><a data-magnet class={btnOutline} href={localePath(locale, "/projects/")}>{content.actions.allProjects}<Icon name="arrowRight" /></a></div>
+</section>
+
+<section id="experience" data-globe="-1.35 -0.2 1.2 0.14" class="grid scroll-mt-20 gap-10 py-20 lg:py-28">
+  <div class="grid gap-6">
+    <p class={sectionLabel}><span class="text-primary">04</span><span data-scramble>{labels.experience}</span></p>
+    <Title text={content.experience.title} class={sectionTitle} />
+  </div>
+  <ol class="grid">
+    {
+      content.jobs.map((job) => (
+        <li data-reveal class="grid gap-3 border-t border-border-strong py-6 lg:grid-cols-[220px_minmax(0,1fr)_minmax(0,1fr)] lg:gap-8">
+          <p class="text-sm text-muted">{job.date}</p>
+          <div class="grid content-start gap-1">
+            <h3 class="text-2xl font-light text-foreground">{job.company}</h3>
+            <p class="text-sm text-foreground">{job.title}</p>
+          </div>
+          <div class="grid content-start gap-2">
+            <p class="text-base leading-relaxed text-pretty text-muted">{job.note}</p>
+            <p class="text-sm text-muted">{job.projects}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+  <div><a class={`${linkText} text-sm font-medium text-foreground`} href={localePath(locale, "/experience/")}>{content.actions.fullExperience}<Icon name="arrowRight" /></a></div>
+</section>
+
+<section id="contact" data-globe="0 -2.05 1.7 1" class="grid min-h-[80svh] scroll-mt-20 content-center justify-items-center gap-8 py-20 pb-40 text-center lg:py-28 lg:pb-52">
+  <p class={sectionLabel}><span class="text-primary">05</span><span data-scramble>{labels.contact}</span></p>
+  <Title text={content.contact.title} class="text-6xl leading-[1.05] font-light tracking-[-0.03em] text-foreground sm:text-8xl lg:text-9xl" />
+  <a class={`${linkText} text-xl font-light text-foreground sm:text-3xl`} href="mailto:contact@vinhnq.com">contact@vinhnq.com<Icon name="arrowUpRight" class="size-6 shrink-0" /></a>
+  <div class="grid w-full max-w-sm grid-cols-2 gap-3 sm:flex sm:w-auto sm:max-w-none sm:flex-wrap sm:justify-center">
+    <a data-magnet class={`${btnPrimary} col-span-2`} href={content.cvFile} download><Icon name="download" />{content.actions.downloadCv}</a>
+    <a data-magnet class={btnOutline} href="https://github.com/Nqvinh7603">GitHub</a>
+    <a data-magnet class={btnOutline} href="https://linkedin.com/in/nqvinh76">LinkedIn</a>
+  </div>
+</section>

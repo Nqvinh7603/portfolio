@@ -1,12 +1,12 @@
 ---
-import type { DiagramEdge } from "../data/architecture";
+import type { DiagramEdge } from "../data/diagrams";
 
 type Props = { edge: DiagramEdge; index: number };
 
 const { edge, index } = Astro.props;
 ---
 
-<path d={edge.path} class="dg-edge"></path>
+<path d={edge.path} class="dg-edge" pathLength="1"></path>
 {
   edge.hasPacket && (
     <circle r="4" class="dg-packet">

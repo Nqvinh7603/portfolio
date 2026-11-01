@@ -1,0 +1,11 @@
+---
+import { getContent } from "../../../i18n";
+import Layout from "../../../layouts/Layout.astro";
+import Experience from "../../../views/Experience.astro";
+
+const { experience } = getContent("vi");
+---
+
+<Layout locale="vi" path="/experience/" title={experience.pageTitle} description={experience.pageIntro}>
+  <Experience locale="vi" />
+</Layout>

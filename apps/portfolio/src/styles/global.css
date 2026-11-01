@@ -1,5 +1,9 @@
 @import "tailwindcss";
-@import "@fontsource-variable/inter";
+@import "@fontsource/be-vietnam-pro/300.css";
+@import "@fontsource/be-vietnam-pro/400.css";
+@import "@fontsource/be-vietnam-pro/500.css";
+@import "@fontsource/be-vietnam-pro/600.css";
+@import "@fontsource/cormorant-garamond/500-italic.css";
 
 :root,
 .force-light {
@@ -10,11 +14,11 @@
      Một font cho cả app. Phân vai bằng weight, không bằng font thứ hai:
      heading 600, body 400, nhãn phụ 500. tracking-tight chỉ cho chữ có dấu từ
      text-3xl trở lên, xem T2 trong rules-type.md. */
-  --app-font: "Inter Variable", ui-sans-serif, system-ui, sans-serif;  /* Tailwind đọc qua --font-sans, khối @theme bên dưới */
+  --app-font: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;  /* Tailwind đọc qua --font-sans, khối @theme bên dưới */
   /* ============================================================== */
 
   /* ===== MÀU NHẤN, CHỖ 1 TRONG 2: NỀN SÁNG ===== */
-  --primary: #4f46e5;          /* màu nhấn chàm người dùng đã chọn */
+  --primary: #4f46e5;
   --primary-hover: color-mix(in oklab, var(--primary) 85%, var(--background));    /* lệch về phía NỀN một bậc (1.31:1 với --primary): nền sáng thì nhạt đi */
   --primary-foreground: #ffffff;  /* màu chữ ĐỨNG TRÊN nền nhấn. Bắt buộc phải
                                      có, vì ở nền tối màu nhấn thành gần trắng,
@@ -28,18 +32,18 @@
   --background: #f4f4f6;   /* nền trang, xám nhạt, không bao giờ trắng */
   --surface: #ffffff;      /* nền card, input, header */
   --foreground: #2c2c2c;   /* chữ chính */
-  --muted: #707070;        /* chữ phụ, label, placeholder, icon phụ. Xám trung tính
+  --muted: #5f5f6b;        /* chữ phụ, label, placeholder, icon phụ. Xám trung tính
                               nhạt nhất còn qua WCAG AA 4.5 trên cả hai nền: 4.95:1
                               trên --surface, 4.51:1 trên --background */
   /* Đường tóc trang trí: viền card, viền khung dropdown, đường chia trong danh
      sách và trong menu. Nhạt đến mức chỉ đủ vạch ranh giới. Xem luật M13, M14. */
-  --border: #f7f7f8;
+  --border: #ececf0;
   /* Đậm hơn ĐÚNG một bậc. Cho viền Ô NHẬP và NÚT OUTLINE (viền là thứ duy nhất
      báo "đây là chỗ gõ / chỗ bấm", vì cả hai cùng nền trắng với card), đường kẻ
      khung app và viền card khi hover. Đây là token viền thứ hai và cũng là token
      cuối, xem luật M14, M16. ~1.2:1 với nền trắng: đánh đổi thẩm mỹ có chủ ý,
      xem P3 trong styles.md. */
-  --border-strong: #eaeaea;   /* #f2f2f2 (1.1:1) mờ quá, radio gần như vô hình;
+  --border-strong: #e0e0e6;   /* #f2f2f2 (1.1:1) mờ quá, radio gần như vô hình;
                                  #e4e4e7 (1.27:1) thì đường kẻ sidebar đậm. Chốt ở giữa. */
   /* Đường kẻ chạy hết hàng tab `underline`. Phủ mờ theo chữ nên tự đậm đúng mức trên mọi nền: trên nền
      trang #f4f4f6 ra #dedee0 (chênh 22 mức), trên card trắng #e8e8e8 (23). --border-strong trên nền trang
@@ -64,7 +68,7 @@
      danh sách trong widget (I10); mục đang sáng trong select / bảng lệnh; dải giữa khoảng ngày, dải
      chọn giờ (components/choice-controls.md). Nền sáng bằng đúng --background; nền tối là trắng phủ mờ, vì --background
      tối hơn card nên rê vào sẽ chìm xuống gần như không thấy (1.07:1). */
-  --item-hover: #f4f4f6;
+  --item-hover: #ececf1;
 
   /* Mảng dữ liệu của biểu đồ (cột, vùng tô, phần donut). Nền sáng bằng --primary; nền tối hạ
      còn 70%, xem khối .dark. Thang nhiều chuỗi viết `bg-chart-fill/45`… (components/charts.md).
@@ -150,8 +154,111 @@
 
   /* Bo mặc định 12px = rounded-xl, cho mọi phần tử cao từ 40px. Luật F1. */
   --radius: 0.75rem;
+
+  /* Màu nhấn duy nhất: chỉ cho thứ đang chạy trong sơ đồ và mô phỏng. */
+  --signal: #4f46e5;
 }
 
+/* Dark mode mặc định của skill là navy rất tối: đây là GU, không phải quy ước. Dự án đã có
+   bảng tối riêng (xám kẽm, xám trung tính) thì theo dự án (M23).
+   Viền là rgba mờ chứ không phải màu đặc, nếu không sẽ thành lưới kẻ ô.
+   Màu tối không phải màu sáng đảo ngược: mỗi token khai giá trị riêng.
+
+   Khối này chỉ cần khi sản phẩm thật sự có dark mode. Không làm thì xoá đi. */
+.dark,
+.force-dark {
+  color-scheme: dark;
+  --signal: #a5b4fc;
+
+  /* ===== MÀU NHẤN, CHỖ 2 TRONG 2: NỀN TỐI =====
+     BẮT BUỘC khai lại. Màu nhấn của nền sáng đem nguyên sang nền tối là
+     tàng hình, và mọi nút nhấn sẽ phải đảo thành trắng, mất sạch thứ bậc.
+     Màu gần đen thì bản tối là gần trắng. Màu có sắc thì lấy bản sáng hơn
+     khoảng hai bậc của chính nó. */
+  --primary: #a5b4fc;
+  /* Lệch về phía NỀN một bậc như bản sáng, tức TỐI đi (1.26:1 với --primary). Không sáng lên
+     #ffffff: trắng tuyệt đối là khối chói nhất màn tối, trái M23. Chữ trên nó 13.7:1. */
+  --primary-hover: #c7d2fe;
+  --primary-foreground: #0b0d1a;  /* nền nhấn giờ gần trắng, chữ phải đảo lại */
+  --primary-light: rgba(165, 180, 252, 0.12);
+  /* ============================================ */
+
+  --background: #05060f;
+  /* Cột biểu đồ màu nhấn gần trắng 100% là khối chói nhất màn tối, nặng hơn tên trang và hàng
+     số (chủ dự án chọn 70%). M32. */
+  --chart-fill: color-mix(in srgb, var(--primary) 70%, transparent);
+
+  /* Tầng nổi sáng dần: nền trang < card < lớp nổi, mỗi bậc ~1.07–1.09:1 (M21). */
+  --surface-overlay: #171a26;
+  /* Bóng đậm gấp ~5 bản sáng: bóng 10% trên nền gần đen là không thấy. Thứ thật sự tách lớp
+     nổi khỏi trang là viền 1px (`border border-border` của lớp nổi) + nền sáng hơn (M23). */
+  --elevation-popover: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+  --elevation-modal: 0 20px 25px -5px rgb(0 0 0 / 0.6), 0 8px 10px -6px rgb(0 0 0 / 0.6);
+
+  /* Vùng tô là trắng phủ mờ, SÁNG hơn card (M21). Phủ mờ nên đặt trên nền trang, card hay
+     lớp nổi đều giữ được độ chênh, không phải khai một màu cho từng nền. Độ chênh ngang bản
+     sáng (đo trên card #0f111a):
+     - --item-hover 5%   → 1.12:1 (bản sáng #f4f4f6 trên trắng 1.10:1);
+     - --secondary  8%   → 1.22:1 (bản sáng #e7e8ec trên trắng 1.22:1), đậm hơn rê một bậc.
+     Đừng dùng màu đặc tối hơn nền trang (#010207): gần như không tách khỏi nền. */
+  --item-hover: rgb(255 255 255 / 0.05);
+  --secondary: rgb(255 255 255 / 0.08);
+  /* Rê vào đậm thêm 5%: chênh 12 mức như bản sáng (#e7e8ec → #dbdce2). 0.11 chỉ chênh 7 mức, nút
+     "Xem tất cả", "Huỷ" rê vào gần như không đổi. */
+  --secondary-hover: rgb(255 255 255 / 0.13);
+
+  --background-hover: #171a26;
+  --surface-hover: #141722;  /* sáng hơn --surface một chút, luật I10 */
+  /* Nền rê nút viền: phủ mờ, nên một giá trị đúng cho cả nền trang, card lẫn lớp nổi. Bản
+     sáng phải đặc vì phủ đen mờ trên nền trang ra trùng màu viền; ở nền tối viền là ánh xanh
+     mờ, không trùng. */
+  --button-hover-surface: rgb(255 255 255 / 0.08);
+  --button-hover-page: rgb(255 255 255 / 0.08);
+  /* Bóng đen khó thấy trên nền tối: ô nổi nhờ viền và vệt sáng mép trên. */
+  --shadow-segment-track: inset 0 0 0 1px var(--border), inset 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-segment-thumb: 0 0 0 1px var(--border-strong), inset 0 1px 0 rgb(255 255 255 / 0.06), 0 1px 2px rgb(0 0 0 / 0.5);
+  --ring-focus: rgba(233, 237, 245, 0.12);
+
+  /* Màu nhấn ở nền tối là gần trắng. Dùng làm NỀN thì đẹp, dùng làm ĐƯỜNG MẢNH
+     thì thành sợi trắng đặc, cắt vào mắt. Viền focus lấy chính màu đó nhưng hạ
+     độ đục xuống, vừa đủ 3:1 (WCAG). Xem luật M22. */
+  --border-focus: rgba(233, 237, 245, 0.42);  /* 3.6:1, WCAG 3:1 */
+  --surface: #10121f;
+  --foreground: #e9edf5;
+  --muted: #a8afc4;
+  /* Ở nền tối viền ĐẢO VAI: #0f111a với #05060f chênh nhau quá ít nên viền
+     trở thành thứ chính để tách khối; bóng vẫn giữ nhưng chỉ phụ. Xem luật M23.
+     Hai vai như bản sáng (M14), đo trên card: --border 1.23:1, --border-strong
+     1.33:1 (bản sáng 1.2:1). Ô nhập ở nền tối GIỮ viền --border-strong, không bỏ (M32).
+     Đừng lên 0.2 (1.47:1): đường kẻ dòng bảng đậm hơn hẳn bản sáng, bảng thành
+     lưới kẻ ô (chủ dự án duyệt 0.16); ô nhập, checkbox ở 0.16 vẫn đọc ra. */
+  --border: rgba(160, 180, 220, 0.12);
+  --border-strong: rgba(160, 180, 220, 0.18);
+
+  /* Màu mang nghĩa ở nền tối: chữ SÁNG lên (-400), nền là màu -500 phủ mờ.
+     Nền -50 của bản sáng đem sang đây là ra khối trắng giữa màn tối.
+     Tương phản đo trên --surface. */
+  --danger: #ff637e;                       /* rose-400, 6.2:1 */
+  --danger-bg: rgb(255 32 86 / 0.1);
+  --danger-bg-hover: rgb(255 32 86 / 0.15);
+
+  --error: #fb2c36;
+  --error-ring: rgb(251 44 54 / 0.15);
+  --error-text: #ff6467;                   /* red-400, 6.5:1 */
+  --error-bg: rgb(251 44 54 / 0.1);
+  --error-border: rgb(251 44 54 / 0.3);
+  --error-strong: #ff6467;                 /* red-400, 6.0:1 trên --error-bg */
+
+  --success-bg: rgb(0 188 125 / 0.15);
+  --success: #00d492;                      /* emerald-400, 7.8:1 */
+  --warning-bg: rgb(254 154 0 / 0.15);
+  /* orange-400, KHÔNG amber-400: thang amber trôi từ cam sang vàng khi sáng lên (OKLCH: amber-700 49°,
+     amber-400 84°), chữ "Quá hạn" cam ở bản sáng thành vàng ở bản tối.
+     orange-400 56°, lệch 7°. 7.9:1 trên card, 6.2:1 trên --warning-bg. M7. */
+  --warning: #ff8904;
+  --neutral-bg: rgb(113 113 123 / 0.15);
+  --neutral: #9f9fa9;                      /* zinc-400, 6.2:1 */
+}
 /* ===== MAP TOKEN SANG CLASS CỦA TAILWIND V4 =====
    Thiếu khối này thì `bg-surface`, `text-muted`, `border-border-strong`, `bg-primary/8`…
    không sinh ra class nào, màn chép từ skill mất màu mà không báo lỗi. Đặt sau
@@ -162,6 +269,7 @@
    class `rose-*`, `red-*`… như khối màu mang nghĩa ở trên. */
 @theme inline {
   --font-sans: var(--app-font);
+  --color-signal: var(--signal);
 
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
@@ -195,6 +303,11 @@
   --shadow-modal: var(--elevation-modal);
 }
 
+/* Tailwind v4 mặc định cho `dark:` chạy theo `prefers-color-scheme` của máy, KHÔNG theo class.
+   Token đổi theo `.dark` mà `dark:` đổi theo máy thì bấm nút Tối trên máy đang sáng ra nửa nọ
+   nửa kia. Dòng này cho `dark:` theo class, và không ăn vào vùng `.force-light` (M33).
+   `:where` giữ độ ưu tiên bằng 0, nên `dark:` không tự thắng class khác. Không Tailwind thì xoá. */
+@custom-variant dark (&:where(.dark, .dark *, .force-dark, .force-dark *):not(:where(.force-light, .force-light *)));
 /* ================================================= */
 
 /* ===== NỀN RÊ CỦA NÚT VIỀN THEO NỀN PHÍA SAU =====
@@ -263,29 +376,123 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Sơ đồ kiến trúc: màu suy từ token để đổi theme hay màu nhấn không phải sửa SVG. */
-.dg-node { fill: var(--surface); stroke: color-mix(in srgb, var(--foreground) 22%, transparent); }
-.dg-node-key { stroke: var(--primary); stroke-width: 1.5; }
+/* Sơ đồ kiến trúc: màu suy từ token nên tự đổi theo giao diện sáng tối. */
+.dg-node { fill: var(--background); stroke: color-mix(in srgb, var(--foreground) 22%, transparent); transition: stroke 0.25s; }
+.dg-node-key { stroke: var(--signal); stroke-width: 1.5; }
 .dg-edge { fill: none; stroke: color-mix(in srgb, var(--foreground) 32%, transparent); stroke-width: 1.5; }
 .dg-group { fill: color-mix(in srgb, var(--foreground) 3%, transparent); stroke: color-mix(in srgb, var(--foreground) 18%, transparent); stroke-dasharray: 4 4; }
 .dg-title { fill: var(--foreground); font: 500 14px var(--app-font); }
 .dg-sub { fill: var(--muted); font: 400 12px var(--app-font); }
 .dg-label { fill: var(--muted); font: 500 12px var(--app-font); }
-.dg-packet { fill: var(--primary); }
+.dg-packet { fill: var(--signal); }
+.dg-node.is-active { stroke: var(--signal); stroke-width: 1.5; }
+.dg-node.is-failed { stroke: var(--danger); stroke-width: 1.5; }
+.dg-edge.is-failed { stroke: var(--danger); stroke-dasharray: 4 4; }
+.dg-packet.is-failed { fill: var(--danger); }
+
+/* Chuyển động: chỉ transform và opacity, tắt hết khi người xem bật giảm chuyển động.
+   Lớp .js do script đầu trang gắn, nên không có JavaScript thì nội dung vẫn hiện đủ. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(0.45em); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes cue-bob {
+  50% { transform: translateY(4px); }
+}
+@keyframes log-in {
+  from { opacity: 0; transform: translateX(-8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.marquee-track { width: max-content; }
+.char { display: inline-block; }
+.arrow { transition: translate 0.2s; }
+a:hover > .arrow { translate: 3px 0; }
+.nav-link { position: relative; }
+.nav-link::after { content: ""; position: absolute; inset: auto 0 -4px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 0.25s; }
+.nav-link:hover::after, .nav-link[aria-current]::after { transform: scaleX(1); }
+[data-progress] { transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, #6366f1, #a78bfa); }
+
+/* Chữ nhấn của tiêu đề: serif nghiêng, chuyển màu. */
+.accent { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-weight: 500; }
+.accent, .accent .char { background: linear-gradient(180deg, #4f46e5, #7c3aed); -webkit-background-clip: text; background-clip: text; color: transparent; padding-inline-end: 0.04em; }
+.dark .accent, .dark .accent .char { background-image: linear-gradient(180deg, #c7d2fe, #a78bfa); }
+.char:hover { translate: 0 -0.06em; }
+.char { transition: translate 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+/* Khối kính để địa cầu phía sau vẫn thấp thoáng. */
+.glass { background: color-mix(in srgb, var(--surface) 68%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+
+.btn-glow { background: linear-gradient(135deg, #5b5bf0, #7c3aed); color: #fff; box-shadow: 0 0 0 1px rgb(255 255 255 / 0.14) inset, 0 8px 28px -8px rgb(109 92 246 / 0.75); transition: box-shadow 0.25s, filter 0.25s, transform 0.2s ease-out; }
+.btn-glow:hover { filter: brightness(1.12); box-shadow: 0 0 0 1px rgb(255 255 255 / 0.22) inset, 0 10px 36px -6px rgb(109 92 246 / 0.95); }
+[data-magnet] { transition: transform 0.2s ease-out, background-color 0.2s; }
+
+[data-header] { transition: background-color 0.3s, border-color 0.3s; }
+[data-header].is-scrolled { background: color-mix(in srgb, var(--background) 72%, transparent); border-color: var(--border-strong); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+
+[data-rail] a { display: flex; align-items: center; justify-content: flex-end; gap: 8px; min-height: 24px; font-size: 12px; color: var(--muted); opacity: 0.8; transition: opacity 0.25s, color 0.25s; }
+[data-rail] a::before { content: ""; width: 12px; height: 1px; background: currentColor; transition: width 0.25s; }
+[data-rail] a:hover, [data-rail] a[data-active] { opacity: 1; color: var(--foreground); }
+[data-rail] a[data-active]::before { width: 26px; }
+
+[data-spotlight] { position: relative; transition: border-color 0.25s, transform 0.2s ease-out; }
+[data-spotlight]::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: radial-gradient(340px circle at var(--x, 50%) var(--y, 50%), color-mix(in srgb, var(--primary) 16%, transparent), transparent 70%); opacity: 0; transition: opacity 0.25s; pointer-events: none; }
+[data-spotlight]:hover { border-color: color-mix(in srgb, var(--primary) 50%, transparent); }
+[data-spotlight]:hover::before { opacity: 1; }
+
+/* Màn khởi động: chỉ lần đầu trong phiên. Có hẹn giờ CSS để không bao giờ kẹt, kể cả khi JavaScript lỗi. */
+[data-boot] { display: none; }
+@keyframes boot-out { to { opacity: 0; visibility: hidden; } }
+@keyframes boot-fill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
+  @view-transition { navigation: auto; }
 
-  /* Hiệu ứng thêm: trình duyệt chưa hỗ trợ scroll-driven animations vẫn hiện đủ nội dung. */
-  @supports (animation-timeline: view()) {
-    [data-reveal] {
-      animation: reveal linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 30%;
-    }
-    @keyframes reveal {
-      from { opacity: 0.4; translate: 0 12px; }
-      to { opacity: 1; translate: 0 0; }
-    }
+  .char { animation: rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: calc(var(--base, 0ms) + var(--i) * 28ms); }
+  .js [data-reveal] .char { animation-play-state: paused; }
+  .js [data-reveal].is-visible .char { animation-play-state: running; }
+  [data-enter] { animation: enter 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: calc(var(--base, 0ms) + var(--d, 0ms)); }
+  .js:not(.no-boot) { --base: 1150ms; }
+  .js:not(.no-boot) [data-boot] { display: grid; animation: boot-out 0.35s ease-in 1.15s forwards; }
+  .js:not(.no-boot) [data-boot-bar] { animation: boot-fill 1.1s cubic-bezier(0.6, 0, 0.3, 1) both; }
+  .marquee-track { animation: marquee 45s linear infinite; }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  [data-sim-log] li { animation: log-in 0.3s ease-out both; }
+  .scroll-cue svg { animation: cue-bob 1.6s ease-in-out infinite; }
+
+  .js [data-reveal]:not(.char-title) { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); transition-delay: var(--delay, 0ms); }
+  .js [data-reveal]:not(.char-title).is-visible { opacity: 1; transform: none; }
+  .js [data-reveal] .dg-edge[pathLength] { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.1s ease-out 0.25s; }
+  .js [data-reveal].is-visible .dg-edge[pathLength] { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { flex-wrap: wrap; width: auto; }
+  .marquee-copy { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-boot] { display: none !important; }
+}
+
+/* CV in ra luôn nền trắng, kể cả khi người xem đang dùng giao diện tối. */
+@media print {
+  :root, :root.dark {
+    color-scheme: light;
+    --background: #ffffff;
+    --surface: #ffffff;
+    --foreground: #18181b;
+    --muted: #52525b;
+    --border-strong: #d4d4d8;
+    --border: #e4e4e7;
   }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
 }

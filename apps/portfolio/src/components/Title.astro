@@ -1,0 +1,31 @@
+---
+// Tiêu đề hiện dần từng chữ. Phần nằm giữa hai dấu * là chữ nhấn.
+type Props = { text: string; class?: string; as?: "h1" | "h2"; hasReveal?: boolean };
+
+const { text, class: className, as: Tag = "h2", hasReveal = true } = Astro.props;
+const plainText = text.replaceAll("*", "");
+
+let charIndex = 0;
+const parts = text.normalize("NFC").split("*").map((part, index) => ({
+  isAccent: index % 2 === 1,
+  words: part.split(/(\s+)/).filter(Boolean).map((word) => (word.trim() ? Array.from(word).map((char) => ({ char, index: charIndex++ })) : null)),
+}));
+---
+
+<Tag class:list={[className, hasReveal && "char-title"]} data-reveal={hasReveal ? "" : undefined} aria-label={plainText}>
+  {
+    parts.map((part) => (
+      <span class:list={[part.isAccent && "accent"]} aria-hidden="true">
+        {part.words.map((word) =>
+          word ? (
+            <span class="inline-block whitespace-nowrap">
+              {word.map(({ char, index }) => <span class="char" style={`--i: ${index}`}>{char}</span>)}
+            </span>
+          ) : (
+            " "
+          ),
+        )}
+      </span>
+    ))
+  }
+</Tag>

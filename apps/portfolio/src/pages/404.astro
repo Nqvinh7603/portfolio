@@ -1,0 +1,16 @@
+---
+import { getContent } from "../i18n";
+import Layout from "../layouts/Layout.astro";
+import { btnOutline } from "../styles/classes";
+
+const { notFound, actions } = getContent("en");
+---
+
+<Layout locale="en" path="/" title="404">
+  <section class="grid min-h-[60svh] content-center gap-5 py-16">
+    <p class="text-sm font-medium text-primary">404</p>
+    <h1 class="text-4xl font-semibold tracking-tight text-balance text-foreground sm:text-5xl">{notFound.title}</h1>
+    <p class="max-w-prose text-base leading-relaxed text-muted">{notFound.body}</p>
+    <div><a class={btnOutline} href="/">{actions.home}</a></div>
+  </section>
+</Layout>
