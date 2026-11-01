@@ -3,7 +3,7 @@ export const links = {
   cv: null as string | null,
   github: "https://github.com/Nqvinh7603",
   linkedin: "https://linkedin.com/in/nqvinh76",
-  email: "mailto:nqvinh7603@gmail.com",
+  email: "mailto:contact@vinhnq.com",
 };
 
 export const projects = [
