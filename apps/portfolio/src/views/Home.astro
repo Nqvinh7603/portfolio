@@ -12,7 +12,7 @@ type Props = { locale: Locale };
 
 const { locale } = Astro.props;
 const content = getContent(locale);
-const featured = content.projects.filter((project) => project.decisions);
+const featured = content.projects.filter((project) => project.decisions && project.slug !== "straffico");
 const { labels } = content;
 const rail = [
   { id: "top", label: "00" },

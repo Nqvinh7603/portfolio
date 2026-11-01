@@ -24,6 +24,7 @@ export const en: Content = {
       ["Connect", "REST, Kafka, Toss Payments, Kakao AlimTalk, ISO 20022, HSM (PKCS#11)"],
       ["Store", "PostgreSQL, MySQL, Oracle, SQL Server, Redis"],
       ["Operate", "AWS ECS Fargate, RDS, S3, CloudFront, Docker, GitLab CI, GitHub Actions, Linux"],
+      ["Learning", "Kubernetes, Helm, Amazon EKS, Prometheus, Grafana (hands-on labs)"],
     ],
   },
   work: { title: "Selected *work*" },
@@ -65,6 +66,7 @@ export const en: Content = {
       ["Data & messaging", "PostgreSQL, MySQL, Oracle, SQL Server, Redis, Apache Kafka"],
       ["Integrations", "Toss Payments, Kakao AlimTalk, OAuth2 social login, PDF signing (PAdES, PKCS#7) with HSM (PKCS#11), Activiti BPMN"],
       ["DevOps & tools", "Docker, GitLab CI, GitHub Actions, AWS (ECS Fargate, RDS, S3, CloudFront), Linux (LPI certified), JUnit 5, Mockito, Git"],
+      ["Learning", "Kubernetes, Helm, Amazon EKS, Prometheus, Grafana (hands-on labs)"],
     ],
     experienceTitle: "Experience",
     educationTitle: "Education & certification",
@@ -73,25 +75,39 @@ export const en: Content = {
   notFound: { title: "This route doesn't resolve.", body: "The page you are looking for does not exist or has moved." },
   jobs: [
     { company: "Wala-ICT", title: "Backend Software Engineer", date: "04/2026 – Present", note: "Software products for Korean clients. Main backend engineer of a multi-tenant SaaS, responsible for production releases of live platforms.", projects: "BitBuild · S-Space · Miribom" },
-    { company: "Straffico", title: "Backend Engineer", date: "08/2025 – Present", note: "Project and cost control platform for construction companies. Backend features and the blue-green production release pipeline.", projects: "Straffico" },
     { company: "Unit Technology Corporation", title: "Backend Software Engineer, R&D", date: "11/2024 – 03/2026", note: "Digital signature and banking solutions. Highest Potential Employee 2025, Most Productive Team 2025.", projects: "Signature Hub · Paperless · Easy Doc · ACH Gateway · JCanary Core" },
     { company: "Laptrinhjavaweb", title: "Backend Developer", date: "09/2023 – 10/2024", note: "Java backend development.", projects: "Java · Spring Boot" },
+    { company: "Straffico", title: "Freelance Backend Engineer", date: "08/2025 – Present", note: "Project and cost control platform for construction companies. Backend features and the blue-green production release pipeline.", projects: "Straffico" },
   ],
   projects: [
     {
-      slug: "straffico", name: "Straffico", company: "Straffico", domain: "Project and cost control for construction companies", role: "Backend Engineer", meta: "Team project · Java 21",
-      problem: "Construction companies needed sites, warehouses, accounting, and management working from the same numbers.",
+      slug: "signature-hub", name: "Signature Hub", company: "Unit Technology Corporation", domain: "Centralized digital signing platform", role: "Backend Software Engineer", meta: "Team of 4 · banks and enterprises",
+      problem: "Client systems needed one route to several signing providers without storing document content centrally.",
       points: [
-        "Built the GitHub Actions deployment for dev and prod: the JAR is built on the runner, then a blue-green switch releases it with zero downtime.",
-        "Added a deploy lock so two repositories never release to the same server at once.",
-        "Reconciled actual and system fund balances, and built analytics, report builder, and resource schedule APIs.",
-        "Added Web Push notifications, user activity audit, and support request IDs correlated across responses and logs.",
+        "Built backend services for signing through HSM, remote-signing providers, and VNeID.",
+        "Worked on the event-driven signing flow across Spring Boot microservices on Kafka.",
+        "Implemented PDF signing and validation (PAdES, PKCS#7) with HSM integration via PKCS#11.",
       ],
       decisions: [
-        { title: "Release with a blue-green switch", body: "The new version starts beside the live one, and traffic switches only then, so production releases need no downtime window." },
-        { title: "Keep actual and system balances separate", body: "Actual and system fund balances are tracked as two values and reconciled, so a difference stays visible instead of being overwritten." },
+        { title: "Process signing asynchronously", body: "Requests are published as events, processed asynchronously, and tracked by transaction code." },
+        { title: "Keep sensitive content out of the hub", body: "Request bodies between agent and hub are encrypted, and the data and audit services store metadata only." },
       ],
-      stack: ["Java 21", "MyBatis", "Redis", "GitHub Actions"],
+      stack: ["Spring Cloud", "Kafka", "PostgreSQL", "PKCS#11"],
+    },
+    {
+      slug: "ach-gateway", name: "ACH Gateway", company: "Unit Technology Corporation", domain: "NAPAS interbank payment gateway", role: "Backend Software Engineer", meta: "Team of 12 · banking",
+      problem: "Interbank messages had to be validated, tracked, and reconciled across NAPAS and Core Banking.",
+      points: [
+        "Implemented inward-deposit processing on ISO 20022 pacs.008 with validation, business rules, status tracking, and process logging.",
+        "Developed reconciliation against NAPAS and Core Banking records to detect mismatches.",
+        "Optimized SQL for transaction logs and latest-status lookup.",
+        "Implemented the camt.033 copy-transaction flow.",
+      ],
+      decisions: [
+        { title: "Compare against both sides", body: "Reconciliation checks internal transactions against NAPAS and Core Banking records, so a mismatch is visible whichever side it starts on." },
+        { title: "Log the process, not only the result", body: "Inward-deposit processing keeps status tracking and process logging alongside validation and business rules." },
+      ],
+      stack: ["Spring Boot", "SQL Server", "Redis", "ISO 20022"],
     },
     {
       slug: "s-space", name: "S-Space", company: "Wala-ICT", domain: "Pilates & fitness studio SaaS", role: "Backend Engineer", meta: "Team of 5 · live at s-space.co.kr",
@@ -110,21 +126,6 @@ export const en: Content = {
       stack: ["Java 17", "ECS Fargate", "RDS MySQL", "CloudFront"],
     },
     {
-      slug: "ach-gateway", name: "ACH Gateway", company: "Unit Technology Corporation", domain: "NAPAS interbank payment gateway", role: "Backend Software Engineer", meta: "Team of 12 · banking",
-      problem: "Interbank messages had to be validated, tracked, and reconciled across NAPAS and Core Banking.",
-      points: [
-        "Implemented inward-deposit processing on ISO 20022 pacs.008 with validation, business rules, status tracking, and process logging.",
-        "Developed reconciliation against NAPAS and Core Banking records to detect mismatches.",
-        "Optimized SQL for transaction logs and latest-status lookup.",
-        "Implemented the camt.033 copy-transaction flow.",
-      ],
-      decisions: [
-        { title: "Compare against both sides", body: "Reconciliation checks internal transactions against NAPAS and Core Banking records, so a mismatch is visible whichever side it starts on." },
-        { title: "Log the process, not only the result", body: "Inward-deposit processing keeps status tracking and process logging alongside validation and business rules." },
-      ],
-      stack: ["Spring Boot", "SQL Server", "Redis", "ISO 20022"],
-    },
-    {
       slug: "bitbuild", name: "BitBuild", company: "Wala-ICT", domain: "Multi-tenant construction procurement SaaS", role: "Main Backend Engineer", meta: "Team of 4 · first sprint to production",
       problem: "A new multi-tenant product needed clear boundaries and purchase flows that never duplicate.",
       points: [
@@ -139,20 +140,6 @@ export const en: Content = {
         { title: "Assume every send and job can repeat", body: "Idempotency keys stop duplicate purchase-order transmission, and PostgreSQL advisory locks make scheduled jobs run once across instances." },
       ],
       stack: ["Java 21", "PostgreSQL", "Redis", "GitLab CI"],
-    },
-    {
-      slug: "signature-hub", name: "Signature Hub", company: "Unit Technology Corporation", domain: "Centralized digital signing platform", role: "Backend Software Engineer", meta: "Team of 4 · banks and enterprises",
-      problem: "Client systems needed one route to several signing providers without storing document content centrally.",
-      points: [
-        "Built backend services for signing through HSM, remote-signing providers, and VNeID.",
-        "Worked on the event-driven signing flow across Spring Boot microservices on Kafka.",
-        "Implemented PDF signing and validation (PAdES, PKCS#7) with HSM integration via PKCS#11.",
-      ],
-      decisions: [
-        { title: "Process signing asynchronously", body: "Requests are published as events, processed asynchronously, and tracked by transaction code." },
-        { title: "Keep sensitive content out of the hub", body: "Request bodies between agent and hub are encrypted, and the data and audit services store metadata only." },
-      ],
-      stack: ["Spring Cloud", "Kafka", "PostgreSQL", "PKCS#11"],
     },
     {
       slug: "miribom", name: "Miribom", company: "Wala-ICT", domain: "Beauty booking with AI face simulation", role: "Backend Engineer", meta: "Team of 9 · live at miribom.kr",
@@ -186,6 +173,21 @@ export const en: Content = {
       slug: "jcanary-core", name: "JCanary Core", company: "Unit Technology Corporation", domain: "Internal Java and Spring framework", role: "Backend Software Engineer", meta: "Team of 5 · in-house platform",
       points: ["Contributed reusable modules: secrets management with HashiCorp Vault, multi-database data access, storage abstraction, and shared HSM signing utilities."],
       stack: ["Spring Boot", "Vault", "Flyway"],
+    },
+    {
+      slug: "straffico", name: "Straffico", company: "Straffico", domain: "Project and cost control for construction companies", role: "Backend Engineer", meta: "Freelance · Java 21",
+      problem: "Construction companies needed sites, warehouses, accounting, and management working from the same numbers.",
+      points: [
+        "Built the GitHub Actions deployment for dev and prod: the JAR is built on the runner, then a blue-green switch releases it with zero downtime.",
+        "Added a deploy lock so two repositories never release to the same server at once.",
+        "Reconciled actual and system fund balances, and built analytics, report builder, and resource schedule APIs.",
+        "Added Web Push notifications, user activity audit, and support request IDs correlated across responses and logs.",
+      ],
+      decisions: [
+        { title: "Release with a blue-green switch", body: "The new version starts beside the live one, and traffic switches only then, so production releases need no downtime window." },
+        { title: "Keep actual and system balances separate", body: "Actual and system fund balances are tracked as two values and reconciled, so a difference stays visible instead of being overwritten." },
+      ],
+      stack: ["Java 21", "MyBatis", "Redis", "GitHub Actions"],
     },
   ],
 };

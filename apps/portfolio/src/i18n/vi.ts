@@ -24,6 +24,7 @@ export const vi: Content = {
       ["Kết nối", "REST, Kafka, Toss Payments, Kakao AlimTalk, ISO 20022, HSM (PKCS#11)"],
       ["Lưu trữ", "PostgreSQL, MySQL, Oracle, SQL Server, Redis"],
       ["Vận hành", "AWS ECS Fargate, RDS, S3, CloudFront, Docker, GitLab CI, GitHub Actions, Linux"],
+      ["Đang học", "Kubernetes, Helm, Amazon EKS, Prometheus, Grafana (lab thực hành)"],
     ],
   },
   work: { title: "Dự án *tiêu biểu*" },
@@ -65,6 +66,7 @@ export const vi: Content = {
       ["Dữ liệu và messaging", "PostgreSQL, MySQL, Oracle, SQL Server, Redis, Apache Kafka"],
       ["Tích hợp", "Toss Payments, Kakao AlimTalk, đăng nhập mạng xã hội OAuth2, ký PDF (PAdES, PKCS#7) với HSM (PKCS#11), Activiti BPMN"],
       ["DevOps và công cụ", "Docker, GitLab CI, GitHub Actions, AWS (ECS Fargate, RDS, S3, CloudFront), Linux (chứng chỉ LPI), JUnit 5, Mockito, Git"],
+      ["Đang học", "Kubernetes, Helm, Amazon EKS, Prometheus, Grafana (lab thực hành)"],
     ],
     experienceTitle: "Kinh nghiệm",
     educationTitle: "Học vấn và chứng chỉ",
@@ -73,25 +75,39 @@ export const vi: Content = {
   notFound: { title: "Không tìm thấy đường dẫn này.", body: "Trang bạn tìm không tồn tại hoặc đã được chuyển đi." },
   jobs: [
     { company: "Wala-ICT", title: "Backend Software Engineer", date: "04/2026 – Hiện tại", note: "Phát triển sản phẩm cho khách hàng Hàn Quốc. Backend chính của một SaaS đa tenant, phụ trách release production cho các nền tảng đang chạy.", projects: "BitBuild · S-Space · Miribom" },
-    { company: "Straffico", title: "Backend Engineer", date: "08/2025 – Hiện tại", note: "Nền tảng quản lý dự án và chi phí cho doanh nghiệp xây dựng. Phát triển tính năng backend và quy trình release production blue-green.", projects: "Straffico" },
     { company: "Unit Technology Corporation", title: "Backend Software Engineer, R&D", date: "11/2024 – 03/2026", note: "Giải pháp chữ ký số và ngân hàng. Highest Potential Employee 2025, Most Productive Team 2025.", projects: "Signature Hub · Paperless · Easy Doc · ACH Gateway · JCanary Core" },
     { company: "Laptrinhjavaweb", title: "Backend Developer", date: "09/2023 – 10/2024", note: "Phát triển backend Java.", projects: "Java · Spring Boot" },
+    { company: "Straffico", title: "Freelance Backend Engineer", date: "08/2025 – Hiện tại", note: "Nền tảng quản lý dự án và chi phí cho doanh nghiệp xây dựng. Phát triển tính năng backend và quy trình release production blue-green.", projects: "Straffico" },
   ],
   projects: [
     {
-      slug: "straffico", name: "Straffico", company: "Straffico", domain: "Quản lý dự án và chi phí cho doanh nghiệp xây dựng", role: "Backend Engineer", meta: "Dự án nhóm · Java 21",
-      problem: "Doanh nghiệp xây dựng cần công trường, kho, kế toán và quản lý cùng làm việc trên một bộ số liệu.",
+      slug: "signature-hub", name: "Signature Hub", company: "Unit Technology Corporation", domain: "Nền tảng ký số tập trung", role: "Backend Software Engineer", meta: "Team 4 người · ngân hàng và doanh nghiệp",
+      problem: "Các hệ thống khách hàng cần một đường ký chung tới nhiều nhà cung cấp mà không lưu nội dung tài liệu tập trung.",
       points: [
-        "Xây dựng deploy bằng GitHub Actions cho dev và prod: build JAR trên runner, rồi release bằng blue-green switch không downtime.",
-        "Thêm khóa deploy để hai repository không bao giờ release cùng lúc lên một server.",
-        "Đối soát số dư quỹ thực tế và số dư hệ thống, đồng thời xây dựng API phân tích, report builder và lịch nguồn lực.",
-        "Thêm thông báo Web Push, audit hoạt động người dùng và mã yêu cầu hỗ trợ liên kết giữa response với log.",
+        "Xây dựng các service backend để ký qua HSM, nhà cung cấp ký từ xa và VNeID.",
+        "Tham gia luồng ký hướng sự kiện giữa các microservice Spring Boot trên Kafka.",
+        "Xây dựng ký và kiểm tra chữ ký PDF (PAdES, PKCS#7), tích hợp HSM qua PKCS#11.",
       ],
       decisions: [
-        { title: "Release bằng blue-green switch", body: "Bản mới chạy song song với bản đang hoạt động rồi mới chuyển traffic, nên release production không cần thời gian dừng." },
-        { title: "Tách số dư thực tế và số dư hệ thống", body: "Hai số dư được lưu riêng rồi đối soát, nên chênh lệch luôn nhìn thấy được thay vì bị ghi đè." },
+        { title: "Xử lý ký bất đồng bộ", body: "Yêu cầu được phát thành sự kiện, xử lý bất đồng bộ và theo dõi bằng mã giao dịch." },
+        { title: "Không giữ nội dung nhạy cảm ở hub", body: "Nội dung request giữa agent và hub được mã hóa, còn service data và audit chỉ lưu metadata." },
       ],
-      stack: ["Java 21", "MyBatis", "Redis", "GitHub Actions"],
+      stack: ["Spring Cloud", "Kafka", "PostgreSQL", "PKCS#11"],
+    },
+    {
+      slug: "ach-gateway", name: "ACH Gateway", company: "Unit Technology Corporation", domain: "Cổng thanh toán liên ngân hàng NAPAS", role: "Backend Software Engineer", meta: "Team 12 người · ngân hàng",
+      problem: "Các thông điệp liên ngân hàng cần được kiểm tra, theo dõi và đối soát giữa NAPAS với Core Banking.",
+      points: [
+        "Xây dựng xử lý inward deposit trên ISO 20022 pacs.008, gồm kiểm tra, quy tắc nghiệp vụ, theo dõi trạng thái và ghi log xử lý.",
+        "Phát triển đối soát với dữ liệu NAPAS và Core Banking để phát hiện sai lệch.",
+        "Tối ưu SQL cho log giao dịch và truy vấn trạng thái mới nhất.",
+        "Xây dựng luồng copy transaction camt.033.",
+      ],
+      decisions: [
+        { title: "Đối chiếu với cả hai phía", body: "Đối soát so giao dịch nội bộ với dữ liệu NAPAS và Core Banking, nên sai lệch phát sinh ở phía nào cũng thấy được." },
+        { title: "Ghi lại quá trình, không chỉ kết quả", body: "Xử lý inward deposit có theo dõi trạng thái và log xử lý, đi cùng kiểm tra và quy tắc nghiệp vụ." },
+      ],
+      stack: ["Spring Boot", "SQL Server", "Redis", "ISO 20022"],
     },
     {
       slug: "s-space", name: "S-Space", company: "Wala-ICT", domain: "SaaS quản lý studio Pilates và fitness", role: "Backend Engineer", meta: "Team 5 người · đang chạy tại s-space.co.kr",
@@ -110,21 +126,6 @@ export const vi: Content = {
       stack: ["Java 17", "ECS Fargate", "RDS MySQL", "CloudFront"],
     },
     {
-      slug: "ach-gateway", name: "ACH Gateway", company: "Unit Technology Corporation", domain: "Cổng thanh toán liên ngân hàng NAPAS", role: "Backend Software Engineer", meta: "Team 12 người · ngân hàng",
-      problem: "Các thông điệp liên ngân hàng cần được kiểm tra, theo dõi và đối soát giữa NAPAS với Core Banking.",
-      points: [
-        "Xây dựng xử lý inward deposit trên ISO 20022 pacs.008, gồm kiểm tra, quy tắc nghiệp vụ, theo dõi trạng thái và ghi log xử lý.",
-        "Phát triển đối soát với dữ liệu NAPAS và Core Banking để phát hiện sai lệch.",
-        "Tối ưu SQL cho log giao dịch và truy vấn trạng thái mới nhất.",
-        "Xây dựng luồng copy transaction camt.033.",
-      ],
-      decisions: [
-        { title: "Đối chiếu với cả hai phía", body: "Đối soát so giao dịch nội bộ với dữ liệu NAPAS và Core Banking, nên sai lệch phát sinh ở phía nào cũng thấy được." },
-        { title: "Ghi lại quá trình, không chỉ kết quả", body: "Xử lý inward deposit có theo dõi trạng thái và log xử lý, đi cùng kiểm tra và quy tắc nghiệp vụ." },
-      ],
-      stack: ["Spring Boot", "SQL Server", "Redis", "ISO 20022"],
-    },
-    {
       slug: "bitbuild", name: "BitBuild", company: "Wala-ICT", domain: "SaaS đa tenant về mua sắm xây dựng", role: "Main Backend Engineer", meta: "Team 4 người · từ sprint đầu đến production",
       problem: "Một sản phẩm đa tenant mới cần ranh giới kiến trúc rõ ràng và luồng mua hàng không bao giờ bị trùng.",
       points: [
@@ -139,20 +140,6 @@ export const vi: Content = {
         { title: "Giả định mọi lần gửi và mọi job đều có thể lặp", body: "Idempotency key chặn gửi trùng đơn mua hàng, còn advisory lock của PostgreSQL giúp job định kỳ chỉ chạy một lần trên nhiều instance." },
       ],
       stack: ["Java 21", "PostgreSQL", "Redis", "GitLab CI"],
-    },
-    {
-      slug: "signature-hub", name: "Signature Hub", company: "Unit Technology Corporation", domain: "Nền tảng ký số tập trung", role: "Backend Software Engineer", meta: "Team 4 người · ngân hàng và doanh nghiệp",
-      problem: "Các hệ thống khách hàng cần một đường ký chung tới nhiều nhà cung cấp mà không lưu nội dung tài liệu tập trung.",
-      points: [
-        "Xây dựng các service backend để ký qua HSM, nhà cung cấp ký từ xa và VNeID.",
-        "Tham gia luồng ký hướng sự kiện giữa các microservice Spring Boot trên Kafka.",
-        "Xây dựng ký và kiểm tra chữ ký PDF (PAdES, PKCS#7), tích hợp HSM qua PKCS#11.",
-      ],
-      decisions: [
-        { title: "Xử lý ký bất đồng bộ", body: "Yêu cầu được phát thành sự kiện, xử lý bất đồng bộ và theo dõi bằng mã giao dịch." },
-        { title: "Không giữ nội dung nhạy cảm ở hub", body: "Nội dung request giữa agent và hub được mã hóa, còn service data và audit chỉ lưu metadata." },
-      ],
-      stack: ["Spring Cloud", "Kafka", "PostgreSQL", "PKCS#11"],
     },
     {
       slug: "miribom", name: "Miribom", company: "Wala-ICT", domain: "Đặt lịch làm đẹp với mô phỏng khuôn mặt bằng AI", role: "Backend Engineer", meta: "Team 9 người · đang chạy tại miribom.kr",
@@ -186,6 +173,21 @@ export const vi: Content = {
       slug: "jcanary-core", name: "JCanary Core", company: "Unit Technology Corporation", domain: "Framework Java và Spring nội bộ", role: "Backend Software Engineer", meta: "Team 5 người · nền tảng nội bộ",
       points: ["Đóng góp các module dùng lại: quản lý secret với HashiCorp Vault, truy cập nhiều loại database, trừu tượng hóa lưu trữ và tiện ích ký HSM dùng chung."],
       stack: ["Spring Boot", "Vault", "Flyway"],
+    },
+    {
+      slug: "straffico", name: "Straffico", company: "Straffico", domain: "Quản lý dự án và chi phí cho doanh nghiệp xây dựng", role: "Backend Engineer", meta: "Freelance · Java 21",
+      problem: "Doanh nghiệp xây dựng cần công trường, kho, kế toán và quản lý cùng làm việc trên một bộ số liệu.",
+      points: [
+        "Xây dựng deploy bằng GitHub Actions cho dev và prod: build JAR trên runner, rồi release bằng blue-green switch không downtime.",
+        "Thêm khóa deploy để hai repository không bao giờ release cùng lúc lên một server.",
+        "Đối soát số dư quỹ thực tế và số dư hệ thống, đồng thời xây dựng API phân tích, report builder và lịch nguồn lực.",
+        "Thêm thông báo Web Push, audit hoạt động người dùng và mã yêu cầu hỗ trợ liên kết giữa response với log.",
+      ],
+      decisions: [
+        { title: "Release bằng blue-green switch", body: "Bản mới chạy song song với bản đang hoạt động rồi mới chuyển traffic, nên release production không cần thời gian dừng." },
+        { title: "Tách số dư thực tế và số dư hệ thống", body: "Hai số dư được lưu riêng rồi đối soát, nên chênh lệch luôn nhìn thấy được thay vì bị ghi đè." },
+      ],
+      stack: ["Java 21", "MyBatis", "Redis", "GitHub Actions"],
     },
   ],
 };
