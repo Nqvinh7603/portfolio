@@ -11,14 +11,14 @@ export const vi: Content = {
   cvFile: "/NguyenQuangVinh_CV_VI.pdf",
   hero: {
     eyebrow: "Backend Engineer",
-    statement: "Java Backend Engineer với 3 năm kinh nghiệm về thanh toán liên ngân hàng, chữ ký số và SaaS đa tenant. Tôi xây dựng service, rồi tự thiết lập và release lên production.",
+    statement: "Java Backend Engineer với 3 năm kinh nghiệm về thanh toán liên ngân hàng, chữ ký số và SaaS đa tenant. Tôi xây dựng service, và đưa service lên production qua các lần release.",
     scroll: "Cuộn để khám phá",
   },
   labels: { about: "Hồ sơ", simulation: "Demo trực tiếp", work: "Case study", experience: "Sự nghiệp", contact: "Kết nối" },
   facts: [["3 năm", "kinh nghiệm backend"], ["9 dự án", "ngân hàng, fintech, SaaS"], ["2 nền tảng", "phụ trách release production"], ["Giải thưởng 2025", "Highest Potential Employee"]],
   about: {
     title: "Về *tôi*",
-    body: "Tôi đi lên từ ngân hàng và fintech, nơi giao dịch trùng hay callback bị mất đều gây hậu quả thật. Tôi cũng tự thiết lập và release môi trường production cho các service của mình.",
+    body: "Tôi đi lên từ ngân hàng và fintech, nơi giao dịch trùng hay callback bị mất đều gây hậu quả thật. Tôi cũng phụ trách release production và xử lý lỗi trên môi trường đang chạy.",
     focus: [
       ["Xây dựng", "Java 17 & 21, Spring Boot, Spring Security, Spring Cloud, MyBatis, JPA"],
       ["Kết nối", "REST, Kafka, Toss Payments, Kakao AlimTalk, ISO 20022, HSM (PKCS#11)"],
@@ -109,9 +109,9 @@ export const vi: Content = {
     },
     {
       slug: "s-space", name: "S-Space", company: "Wala-ICT", domain: "SaaS quản lý studio Pilates và fitness", role: "Backend Engineer", meta: "Team 5 người · đang chạy tại s-space.co.kr",
-      problem: "Một nền tảng microservices đang chạy thật cần môi trường production có tài liệu rõ ràng và quy trình release đáng tin cậy.",
+      problem: "Một nền tảng microservices đang chạy thật cần quy trình release đáng tin cậy và được hỗ trợ vận hành hằng ngày.",
       points: [
-        "Thiết lập và viết tài liệu production trên AWS: VPC với private subnet, ECS Fargate, RDS Multi-AZ, ALB và CloudFront.",
+        "Bảo trì và xử lý lỗi môi trường production trên AWS: VPC với private subnet, ECS Fargate, RDS Multi-AZ, ALB, CloudFront, S3 và Secrets Manager.",
         "Phụ trách release production qua GitLab CI → ECR → ECS Fargate, là người bảo trì backend chính của các service auth, user và center.",
         "Xây dựng job reconciliation để khôi phục thanh toán bị mất callback thành công và hết hạn các giao dịch chờ quá lâu.",
         "Mở rộng Toss Payments với luồng merchant trụ sở cho đơn B2B: xác nhận idempotent, hủy và hoàn tiền, theo dõi phí và đối soát.",
@@ -130,7 +130,7 @@ export const vi: Content = {
         "Tái cấu trúc mã nguồn thành hexagonal architecture nhiều module, dùng ArchUnit test để giữ ranh giới.",
         "Dùng idempotency key chống trùng đơn mua hàng và advisory lock để job định kỳ chỉ chạy một lần.",
         "Thiết lập GitLab CI và deploy Docker Compose có health check.",
-        "Xây dựng xác thực đa tenant: JWT với refresh token rotation, thu hồi token bằng Redis, đăng nhập mạng xã hội và RBAC theo phạm vi dữ liệu.",
+        "Xây dựng xác thực đa tenant: JWT với refresh token rotation, thu hồi token bằng Redis, đăng nhập mạng xã hội và RBAC theo phạm vi dữ liệu (cá nhân, công trường được gán, toàn tenant).",
         "Phụ trách domain model, schema PostgreSQL và REST API cho các module mua sắm, hợp đồng, phê duyệt và nhà cung cấp.",
       ],
       decisions: [
@@ -144,10 +144,10 @@ export const vi: Content = {
       points: [
         "Xây dựng trọn thông báo Kakao AlimTalk: API quản lý mẫu và bộ gửi theo outbox với SKIP LOCKED, retry có back-off và dự phòng SMS.",
         "Tích hợp backend Spring với service AI FastAPI: job bất đồng bộ có polling trạng thái, giới hạn retry và khóa chống xếp hàng trùng.",
-        "Phụ trách deploy production và chuyển repository cùng CI/CD từ GitLab tự host sang GitHub.",
+        "Phụ trách release production qua GitLab CI trên runner tự host, build bằng Docker Compose và reload reverse proxy Caddy.",
         "Xây dựng luồng hoàn tiền và thanh toán thẻ cho tiền đặt cọc với Toss Payments.",
       ],
-      stack: ["Java 21", "Axon", "PostgreSQL", "GitHub Actions"],
+      stack: ["Java 21", "Axon", "PostgreSQL", "GitLab CI"],
     },
     {
       slug: "paperless", name: "Paperless", company: "Unit Technology Corporation", domain: "Module chữ ký số", role: "Backend chính của module ký", meta: "Team 6 người",

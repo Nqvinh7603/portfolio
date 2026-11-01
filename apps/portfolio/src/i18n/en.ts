@@ -11,14 +11,14 @@ export const en: Content = {
   cvFile: "/NguyenQuangVinh_CV_EN.pdf",
   hero: {
     eyebrow: "Backend Engineer",
-    statement: "Java Backend Engineer with 3 years across interbank payments, digital signature, and multi-tenant SaaS. I build the service, then set up and release it to production.",
+    statement: "Java Backend Engineer with 3 years across interbank payments, digital signature, and multi-tenant SaaS. I build the service and take it through production releases.",
     scroll: "Scroll to explore",
   },
   labels: { about: "Profile", simulation: "Live demo", work: "Case studies", experience: "Career", contact: "Say hello" },
   facts: [["3 years", "backend engineering"], ["9 projects", "banking, fintech, SaaS"], ["2 platforms", "released to production"], ["2025 award", "Highest Potential Employee"]],
   about: {
     title: "About *me*",
-    body: "My background is banking and fintech, where duplicates and lost callbacks have a real cost. I also set up and release the production environments my services run on.",
+    body: "My background is banking and fintech, where duplicates and lost callbacks have a real cost. I also handle production releases and debug the live environment.",
     focus: [
       ["Build", "Java 17 & 21, Spring Boot, Spring Security, Spring Cloud, MyBatis, JPA"],
       ["Connect", "REST, Kafka, Toss Payments, Kakao AlimTalk, ISO 20022, HSM (PKCS#11)"],
@@ -109,9 +109,9 @@ export const en: Content = {
     },
     {
       slug: "s-space", name: "S-Space", company: "Wala-ICT", domain: "Pilates & fitness studio SaaS", role: "Backend Engineer", meta: "Team of 5 · live at s-space.co.kr",
-      problem: "A live microservices platform needed a documented production environment and dependable releases.",
+      problem: "A live microservices platform needed dependable releases and day-to-day production support.",
       points: [
-        "Set up and documented production on AWS: VPC with private subnets, ECS Fargate, Multi-AZ RDS, ALB, and CloudFront.",
+        "Maintained and debugged the production AWS environment: VPC with private subnets, ECS Fargate, Multi-AZ RDS, ALB, CloudFront, S3, and Secrets Manager.",
         "Handled production releases through GitLab CI → ECR → ECS Fargate as main backend maintainer of the auth, user, and center services.",
         "Built a reconciliation job that recovers payments with lost success callbacks and expires stale pending ones.",
         "Extended Toss Payments with a head-office merchant flow for B2B orders: idempotent confirmation, cancel and refund, fee and settlement tracking.",
@@ -130,7 +130,7 @@ export const en: Content = {
         "Restructured the codebase into a multi-module hexagonal architecture, with ArchUnit tests enforcing boundaries.",
         "Used idempotency keys against duplicate purchase orders and advisory locks for run-once scheduled jobs.",
         "Set up GitLab CI and Docker Compose deployments with health checks.",
-        "Built multi-tenant authentication: JWT with refresh-token rotation, Redis-based revocation, social login, and RBAC with data scopes.",
+        "Built multi-tenant authentication: JWT with refresh-token rotation, Redis-based revocation, social login, and RBAC with data scopes (self, assigned sites, tenant-wide).",
         "Owned the domain model, PostgreSQL schema, and REST APIs for procurement, contract, approval, and supplier modules.",
       ],
       decisions: [
@@ -144,10 +144,10 @@ export const en: Content = {
       points: [
         "Built Kakao AlimTalk notifications end to end: template APIs and an outbox-based sender with SKIP LOCKED claiming, retry with back-off, and SMS fallback.",
         "Integrated the Spring backend with a FastAPI AI service: async jobs with status polling, retry limits, and locking against duplicate re-queues.",
-        "Owned production deployments and migrated repositories and CI/CD from self-hosted GitLab to GitHub.",
+        "Owned production releases through GitLab CI on self-hosted runners, with Docker Compose builds and Caddy reverse proxy reload.",
         "Delivered refund flows and card payment for deposits with Toss Payments.",
       ],
-      stack: ["Java 21", "Axon", "PostgreSQL", "GitHub Actions"],
+      stack: ["Java 21", "Axon", "PostgreSQL", "GitLab CI"],
     },
     {
       slug: "paperless", name: "Paperless", company: "Unit Technology Corporation", domain: "Digital signature module", role: "Main backend of the signing module", meta: "Team of 6",
