@@ -138,7 +138,7 @@ function buildNebula() {
         color = mix(color, vec3(0.20, 0.52, 0.98), smoothstep(0.62, 0.95, cloud) * 0.35);
         // Mép màn đậm hơn giữa màn, để chữ ở giữa vẫn nằm trên nền tối.
         float edge = smoothstep(0.1, 0.85, length(vUv - 0.5) * 1.35);
-        gl_FragColor = vec4(color, mask * (0.2 + edge * 0.36));
+        gl_FragColor = vec4(color, mask * (0.14 + edge * 0.3));
       }`,
   });
   const nebula = new Mesh(new PlaneGeometry(2, 2), material);
@@ -179,8 +179,10 @@ function buildOrbit(radius: number, speed: number, pixelRatio: number) {
 }
 
 function readWaypoints(): Waypoint[] {
+  // Màn dọc hoặc hẹp không đủ chỗ đặt địa cầu cạnh chữ, nên mục nào có tư thế riêng cho màn hẹp thì dùng tư thế đó.
+  const isCramped = innerWidth < 1024 || innerWidth / innerHeight < 1.15;
   return [...document.querySelectorAll<HTMLElement>("[data-globe]")].map((section) => {
-    const [x, y, scale, opacity] = (section.dataset.globe ?? "").split(" ").map(Number);
+    const [x, y, scale, opacity] = ((isCramped && section.dataset.globeNarrow) || section.dataset.globe || "").split(" ").map(Number);
     const rect = section.getBoundingClientRect();
     return { top: rect.top + scrollY + rect.height / 2, x, y, scale, opacity };
   });

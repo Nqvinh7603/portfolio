@@ -12,7 +12,6 @@ export const vi: Content = {
   hero: {
     eyebrow: "Backend Engineer",
     statement: "Java Backend Engineer với 3 năm kinh nghiệm về thanh toán liên ngân hàng, chữ ký số và SaaS đa tenant. Tôi xây dựng service, và đưa service lên production qua các lần release.",
-    scroll: "Cuộn để khám phá",
     location: "Làm việc tại Việt Nam",
   },
   labels: { about: "Hồ sơ", simulation: "Demo trực tiếp", work: "Case study", experience: "Sự nghiệp", contact: "Kết nối" },

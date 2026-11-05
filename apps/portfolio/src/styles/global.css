@@ -3,7 +3,7 @@
 @import "@fontsource/be-vietnam-pro/400.css";
 @import "@fontsource/be-vietnam-pro/500.css";
 @import "@fontsource/be-vietnam-pro/600.css";
-@import "@fontsource/cormorant-garamond/500-italic.css";
+@import "@fontsource/be-vietnam-pro/700.css";
 
 :root,
 .force-light {
@@ -409,9 +409,6 @@ body {
 @keyframes marquee {
   to { transform: translateX(-50%); }
 }
-@keyframes cue-bob {
-  50% { transform: translateY(4px); }
-}
 @keyframes log-in {
   from { opacity: 0; transform: translateX(-8px); }
   to { opacity: 1; transform: translateX(0); }
@@ -422,14 +419,13 @@ body {
 .arrow { transition: translate 0.2s; }
 a:hover > .arrow { translate: 3px 0; }
 .nav-link { position: relative; }
-.nav-link::after { content: ""; position: absolute; inset: auto 0 -4px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 0.25s; }
+.nav-link::after { content: ""; position: absolute; inset: auto 0 8px; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform 0.25s; }
 .nav-link:hover::after, .nav-link[aria-current]::after { transform: scaleX(1); }
 [data-progress] { transform: scaleX(0); transform-origin: left; background: linear-gradient(90deg, #6366f1, #a78bfa); }
 
-/* Chữ nhấn của tiêu đề: serif nghiêng, chuyển màu. */
-.accent { font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-weight: 500; }
-.accent, .accent .char { background: linear-gradient(180deg, #4f46e5, #7c3aed); -webkit-background-clip: text; background-clip: text; color: transparent; padding-inline-end: 0.04em; }
-.dark .accent, .dark .accent .char { background-image: linear-gradient(180deg, #c7d2fe, #a78bfa); }
+/* Chữ nhấn của tiêu đề: cùng font, cùng độ đậm, chỉ khác màu chuyển tím. */
+.accent, .accent .char { background: linear-gradient(135deg, #4f46e5, #9333ea); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.dark .accent, .dark .accent .char { background-image: linear-gradient(135deg, #a5b4fc, #c084fc); }
 .char:hover { translate: 0 -0.06em; }
 .char { transition: translate 0.25s cubic-bezier(0.2, 0.8, 0.2, 1); }
 
@@ -466,9 +462,16 @@ a:hover > .arrow { translate: 3px 0; }
 .avatar-ring::before, .avatar-ring::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: conic-gradient(#6366f1, #a78bfa, transparent 58%, #6366f1); }
 .avatar-ring::after { inset: -6px; filter: blur(14px); opacity: 0.55; }
 
+/* Dải số liệu ở cuối màn đầu: kẻ vạch giữa các ô, 2 cột ở màn hẹp và 4 cột ở màn rộng. */
+.hero-facts > div { border-color: var(--border-strong); }
+.hero-facts > div:nth-child(even) { border-left-width: 1px; }
+.hero-facts > div:nth-child(n + 3) { border-top-width: 1px; }
+@media (min-width: 1024px) {
+  .hero-facts > div:not(:first-child) { border-left-width: 1px; }
+  .hero-facts > div:nth-child(n + 3) { border-top-width: 0; }
+}
+
 .stat-number { background: linear-gradient(180deg, var(--foreground) 30%, color-mix(in srgb, var(--foreground) 45%, var(--primary))); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.focus-row dt { transition: color 0.25s, translate 0.25s; }
-.focus-row:hover dt { color: var(--primary); translate: 4px 0; }
 
 /* Thẻ dự án: nền đặc, không kính mờ, để thẻ trên che hẳn thẻ dưới khi xếp chồng.
    Thẻ lùi ra sau thì tối đi nhờ lớp phủ, không hạ opacity của thẻ: hạ opacity là lộ thẻ nằm dưới. */
@@ -515,7 +518,6 @@ a:hover > .arrow { translate: 3px 0; }
   .marquee-track { animation: marquee 45s linear infinite; }
   .marquee:hover .marquee-track { animation-play-state: paused; }
   [data-sim-log] li { animation: log-in 0.3s ease-out both; }
-  .scroll-cue svg { animation: cue-bob 1.6s ease-in-out infinite; }
   .marquee-outline .marquee-track { animation-duration: 70s; animation-direction: reverse; }
   .live-dot::after { animation: ping 1.8s ease-out infinite; }
   .avatar-ring::before, .avatar-ring::after { animation: spin 6s linear infinite; }

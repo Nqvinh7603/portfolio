@@ -23,7 +23,7 @@ const links = [
   <a href={localePath(locale, "/")} class="inline-flex min-h-8 items-center gap-2.5 text-base font-semibold text-foreground"><span class="btn-glow flex size-8 shrink-0 items-center justify-center rounded-lg"><LogoMark /></span>vinhnq.com</a>
   <div class="flex items-center gap-2 md:gap-6">
     <nav class="hidden items-center gap-6 text-sm text-muted md:flex" aria-label="Main">
-      {links.map((link) => <a class="nav-link hover:text-foreground aria-[current]:font-medium aria-[current]:text-foreground" aria-current={path.startsWith(link.match) ? "page" : undefined} href={link.href}>{link.label}</a>)}
+      {links.map((link) => <a class="nav-link inline-flex min-h-11 items-center hover:text-foreground aria-[current]:font-medium aria-[current]:text-foreground" aria-current={path.startsWith(link.match) ? "page" : undefined} href={link.href}>{link.label}</a>)}
     </nav>
     <div class="flex items-center gap-2">
       <a class={`${btnIcon} text-sm font-medium`} href={localePath(otherLocale, path)} hreflang={otherLocale} lang={otherLocale} aria-label={nav.language}>{otherLocale.toUpperCase()}</a>

@@ -23,7 +23,8 @@ function smoothScroll() {
 function fadeHeroOut() {
   const hero = document.querySelector("[data-hero]");
   if (!hero) return;
-  gsap.to(hero, { yPercent: -16, scale: 0.92, autoAlpha: 0, ease: "none", scrollTrigger: { trigger: "#top", start: "top top", end: "bottom 30%", scrub: true } });
+  // Chỉ bắt đầu mờ khi đáy màn đầu đã lọt vào khung nhìn: màn đầu cao hơn màn hình (điện thoại nhỏ) thì phải đọc hết được đã.
+  gsap.to(hero, { yPercent: -16, scale: 0.92, autoAlpha: 0, ease: "none", scrollTrigger: { trigger: "#top", start: "bottom bottom", end: "bottom 30%", scrub: true } });
 }
 
 function lightWordsOnScroll() {

@@ -12,7 +12,7 @@ const renderItems = [...items, ...items];
     {
       renderItems.map((item, index) => (
         <>
-          <span class:list={["whitespace-nowrap", isOutline ? "text-6xl font-semibold tracking-tight sm:text-8xl" : "text-2xl sm:text-3xl", index >= items.length && "marquee-copy", !isOutline && (index % 3 === 1 ? "accent" : "font-light text-foreground/80")]}>{item}</span>
+          <span class:list={["whitespace-nowrap", isOutline ? "text-6xl font-semibold tracking-tight sm:text-8xl" : "text-2xl sm:text-3xl", index >= items.length && "marquee-copy", !isOutline && (index % 3 === 1 ? "accent font-semibold" : "font-medium text-foreground/80")]}>{item}</span>
           <span class:list={["rotate-45 border border-muted", isOutline ? "size-3" : "size-1.5", index >= items.length && "marquee-copy"]}></span>
         </>
       ))
