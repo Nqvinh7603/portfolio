@@ -13,6 +13,7 @@ export const en: Content = {
     eyebrow: "Backend Engineer",
     statement: "Java Backend Engineer with 3 years across interbank payments, digital signature, and multi-tenant SaaS. I build the service and take it through production releases.",
     scroll: "Scroll to explore",
+    location: "Based in Vietnam",
   },
   labels: { about: "Profile", simulation: "Live demo", work: "Case studies", experience: "Career", contact: "Say hello" },
   facts: [["3 years", "backend engineering"], ["9 projects", "banking, fintech, SaaS"], ["2 platforms", "released to production"], ["2025 award", "Highest Potential Employee"]],

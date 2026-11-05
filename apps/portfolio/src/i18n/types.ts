@@ -24,7 +24,7 @@ export type Content = {
   nav: { projects: string; experience: string; resume: string; contact: string; menu: string; theme: string; language: string; skip: string; source: string };
   actions: { downloadCv: string; viewProjects: string; caseStudy: string; visitSite: string; allProjects: string; fullExperience: string; print: string; backToProjects: string; home: string; viewArchitecture: string; seeSimulation: string };
   cvFile: string;
-  hero: { eyebrow: string; statement: string; scroll: string };
+  hero: { eyebrow: string; statement: string; scroll: string; location: string };
   labels: { about: string; simulation: string; work: string; experience: string; contact: string };
   facts: [string, string][];
   about: { title: string; body: string; focus: [string, string][] };

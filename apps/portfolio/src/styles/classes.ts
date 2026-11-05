@@ -5,5 +5,5 @@ export const btnOutline = `${button} glass border border-border-strong text-fore
 export const btnIcon = "inline-flex size-10 cursor-pointer items-center justify-center rounded-full border border-border-strong glass text-muted hover:text-foreground hover:text-foreground";
 export const linkText = "inline-flex min-h-8 items-center gap-1.5 underline decoration-foreground/30 underline-offset-4 hover:decoration-foreground";
 export const eyebrow = "text-base font-medium text-primary";
-export const sectionTitle = "text-4xl font-light tracking-tight text-balance text-foreground sm:text-6xl";
+export const sectionTitle = "text-5xl font-light tracking-tight text-balance text-foreground sm:text-7xl";
 export const sectionLabel = "flex items-center gap-3 text-sm font-medium text-muted";

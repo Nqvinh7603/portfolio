@@ -1,4 +1,4 @@
-import { AdditiveBlending, BackSide, BufferAttribute, BufferGeometry, Color, DoubleSide, Group, Line, LineBasicMaterial, Mesh, MeshBasicMaterial, NormalBlending, PerspectiveCamera, Points, QuadraticBezierCurve3, RingGeometry, Scene, ShaderMaterial, SphereGeometry, Vector3, WebGLRenderer } from "three";
+import { AdditiveBlending, BackSide, BufferAttribute, BufferGeometry, Color, DoubleSide, Group, Line, LineBasicMaterial, Mesh, MeshBasicMaterial, NormalBlending, PerspectiveCamera, PlaneGeometry, Points, QuadraticBezierCurve3, RingGeometry, Scene, ShaderMaterial, SphereGeometry, Vector3, WebGLRenderer } from "three";
 
 type Waypoint = { top: number; x: number; y: number; scale: number; opacity: number };
 
@@ -17,6 +17,15 @@ const STAR_COUNT = 1400;
 const PACKET_COUNT = 5;
 const MAX_UP_TILT = -0.95;
 const LIGHT_OPACITY = 0.45;
+// Vòng quỹ đạo quanh địa cầu: bán kính, độ nghiêng (rad) và số vòng mỗi giây.
+const ORBITS = [
+  { radius: 1.38, tiltX: 1.25, tiltZ: 0.35, speed: 0.045 },
+  { radius: 1.62, tiltX: 1.05, tiltZ: -0.5, speed: -0.03 },
+];
+const ORBIT_POINTS = 720;
+// Lúc mới vào, địa cầu trồi lên từ dưới thay vì hiện sẵn.
+const INTRO_DROP = 0.4;
+const INTRO_SCALE = 0.86;
 
 const toVector = ([lat, lon]: [number, number], radius = 1) => {
   const phi = ((90 - lat) * Math.PI) / 180;
@@ -33,22 +42,33 @@ function buildDots(raw: Int16Array, step: number, pixelRatio: number) {
   const count = Math.floor(raw.length / 2 / step);
   const positions = new Float32Array(count * 3);
   const glow = new Float32Array(count);
+  const distance = new Float32Array(count);
   const home = toVector(HO_CHI_MINH);
   for (let i = 0; i < count; i++) {
     const point = toVector([raw[i * 2 * step] / 100, raw[i * 2 * step + 1] / 100]);
     point.toArray(positions, i * 3);
     glow[i] = Math.max(0, 1 - point.distanceTo(home) / 0.34);
+    distance[i] = point.angleTo(home) / Math.PI;
   }
   const geometry = new BufferGeometry();
   geometry.setAttribute("position", new BufferAttribute(positions, 3));
   geometry.setAttribute("aGlow", new BufferAttribute(glow, 1));
+  geometry.setAttribute("aDistance", new BufferAttribute(distance, 1));
   const material = new ShaderMaterial({
     transparent: true,
     depthWrite: false,
     blending: AdditiveBlending,
-    uniforms: { uBase: { value: new Color() }, uHot: { value: new Color() }, uRatio: { value: pixelRatio } },
-    vertexShader: `attribute float aGlow; varying float vGlow; uniform float uRatio;
-      void main() { vGlow = aGlow; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = (2.5 + aGlow * 2.6) * uRatio * (3.2 / -mv.z); gl_Position = projectionMatrix * mv; }`,
+    uniforms: { uBase: { value: new Color() }, uHot: { value: new Color() }, uRatio: { value: pixelRatio }, uTime: { value: 0 } },
+    // Sóng lan từ điểm nhà ra khắp các châu lục: mép trước gắt, đuôi tan dần, càng xa càng yếu.
+    vertexShader: `attribute float aGlow; attribute float aDistance; varying float vGlow; uniform float uRatio; uniform float uTime;
+      void main() {
+        float wave = fract(uTime * 0.14 - aDistance);
+        float pulse = smoothstep(0.0, 0.03, wave) * (1.0 - smoothstep(0.03, 0.26, wave)) * (1.0 - aDistance * 0.75);
+        vGlow = clamp(aGlow + pulse * 0.85, 0.0, 1.0);
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = (2.5 + aGlow * 2.6 + pulse * 1.6) * uRatio * (3.2 / -mv.z);
+        gl_Position = projectionMatrix * mv;
+      }`,
     fragmentShader: `varying float vGlow; uniform vec3 uBase; uniform vec3 uHot;
       void main() { float d = length(gl_PointCoord - 0.5); if (d > 0.5) discard; gl_FragColor = vec4(mix(uBase, uHot, vGlow), (0.85 + vGlow * 0.15) * smoothstep(0.5, 0.25, d)); }`,
   });
@@ -84,8 +104,76 @@ function buildStars(pixelRatio: number) {
     blending: AdditiveBlending,
     uniforms: { uTime: { value: 0 }, uRatio: { value: pixelRatio } },
     vertexShader: `attribute float aPhase; varying float vAlpha; uniform float uTime; uniform float uRatio;
-      void main() { vAlpha = 0.35 + 0.45 * sin(uTime * 0.9 + aPhase); gl_PointSize = 1.5 * uRatio; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+      void main() { vAlpha = 0.35 + 0.45 * sin(uTime * 0.9 + aPhase); gl_PointSize = (1.0 + 1.4 * fract(aPhase * 7.31)) * uRatio; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
     fragmentShader: `varying float vAlpha; void main() { if (length(gl_PointCoord - 0.5) > 0.5) discard; gl_FragColor = vec4(0.8, 0.82, 1.0, vAlpha); }`,
+  });
+  return new Points(geometry, material);
+}
+
+// Tinh vân phía sau: một mặt phẳng phủ kín màn, nhiễu fbm trôi chậm. Chỉ dùng ở nền tối.
+function buildNebula() {
+  const material = new ShaderMaterial({
+    transparent: true,
+    depthTest: false,
+    depthWrite: false,
+    blending: AdditiveBlending,
+    uniforms: { uTime: { value: 0 }, uAspect: { value: 1 }, uShift: { value: 0 }, uPointer: { value: new Vector3() } },
+    vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 1.0, 1.0); }`,
+    fragmentShader: `varying vec2 vUv; uniform float uTime; uniform float uAspect; uniform float uShift; uniform vec3 uPointer;
+      float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+      float noise(vec2 p) {
+        vec2 i = floor(p); vec2 f = fract(p); vec2 u = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+      }
+      float fbm(vec2 p) { float v = 0.0; float a = 0.5; for (int i = 0; i < 3; i++) { v += a * noise(p); p = p * 2.03 + 17.0; a *= 0.5; } return v; }
+      void main() {
+        vec2 p = vec2((vUv.x - 0.5) * uAspect, vUv.y - 0.5) * 1.7;
+        p += uPointer.xy * 0.05;
+        p.y += uShift * 0.6;
+        float t = uTime * 0.02;
+        float warp = fbm(p * 1.3 + vec2(t, -t * 0.7));
+        float cloud = fbm(p * 1.1 + warp * 1.6 + vec2(-t * 0.6, t * 0.4));
+        float mask = smoothstep(0.42, 0.9, cloud);
+        vec3 color = mix(vec3(0.16, 0.12, 0.62), vec3(0.50, 0.24, 0.93), smoothstep(0.3, 0.8, warp));
+        color = mix(color, vec3(0.20, 0.52, 0.98), smoothstep(0.62, 0.95, cloud) * 0.35);
+        // Mép màn đậm hơn giữa màn, để chữ ở giữa vẫn nằm trên nền tối.
+        float edge = smoothstep(0.1, 0.85, length(vUv - 0.5) * 1.35);
+        gl_FragColor = vec4(color, mask * (0.2 + edge * 0.36));
+      }`,
+  });
+  const nebula = new Mesh(new PlaneGeometry(2, 2), material);
+  nebula.frustumCulled = false;
+  nebula.renderOrder = -1;
+  return nebula;
+}
+
+// Một vòng quỹ đạo: vệt sáng kiểu sao chổi chạy quanh, phần còn lại của vòng chỉ mờ mờ.
+function buildOrbit(radius: number, speed: number, pixelRatio: number) {
+  const positions = new Float32Array(ORBIT_POINTS * 3);
+  const turns = new Float32Array(ORBIT_POINTS);
+  for (let i = 0; i < ORBIT_POINTS; i++) {
+    const turn = i / ORBIT_POINTS;
+    positions.set([Math.cos(turn * Math.PI * 2) * radius, 0, Math.sin(turn * Math.PI * 2) * radius], i * 3);
+    turns[i] = turn;
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute("position", new BufferAttribute(positions, 3));
+  geometry.setAttribute("aTurn", new BufferAttribute(turns, 1));
+  const material = new ShaderMaterial({
+    transparent: true,
+    depthWrite: false,
+    blending: AdditiveBlending,
+    uniforms: { uTime: { value: 0 }, uSpeed: { value: speed }, uRatio: { value: pixelRatio }, uColor: { value: new Color() } },
+    vertexShader: `attribute float aTurn; varying float vAlpha; uniform float uTime; uniform float uSpeed; uniform float uRatio;
+      void main() {
+        float head = fract(aTurn * sign(uSpeed) - uTime * abs(uSpeed));
+        float tail = pow(head, 7.0);
+        vAlpha = 0.16 + tail * 0.84;
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = (1.2 + pow(head, 60.0) * 5.0 + tail * 1.4) * uRatio * (3.2 / -mv.z);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `varying float vAlpha; uniform vec3 uColor; void main() { float d = length(gl_PointCoord - 0.5); if (d > 0.5) discard; gl_FragColor = vec4(uColor, vAlpha * smoothstep(0.5, 0.15, d)); }`,
   });
   return new Points(geometry, material);
 }
@@ -124,6 +212,9 @@ export async function startGlobe(canvas: HTMLCanvasElement) {
   const camera = new PerspectiveCamera(FOV, 1, 0.1, 30);
   camera.position.z = CAMERA_Z;
 
+  const nebula = buildNebula();
+  scene.add(nebula);
+
   const stars = buildStars(pixelRatio);
   scene.add(stars);
 
@@ -155,6 +246,13 @@ export async function startGlobe(canvas: HTMLCanvasElement) {
 
   const dots = buildDots(await loadLand(), isNarrow() ? 2 : 1, pixelRatio);
   spinner.add(dots);
+
+  const orbits = ORBITS.map(({ radius, tiltX, tiltZ, speed }) => {
+    const orbit = buildOrbit(radius, speed, pixelRatio);
+    orbit.rotation.set(tiltX, 0, tiltZ);
+    globe.add(orbit);
+    return orbit;
+  });
 
   const from = toVector(HO_CHI_MINH, 1.005);
   const to = toVector(SEOUL, 1.005);
@@ -196,6 +294,12 @@ export async function startGlobe(canvas: HTMLCanvasElement) {
     arcMaterial.color.set(isDark ? "#c7d2fe" : "#4f46e5");
     packetMaterial.uniforms.uColor.value.set(isDark ? "#ffffff" : "#3122c9");
     for (const material of ringMaterials) material.color.set(isDark ? "#c7d2fe" : "#4f46e5");
+    for (const orbit of orbits) {
+      orbit.material.uniforms.uColor.value.set(isDark ? "#c7d2fe" : "#4f46e5");
+      orbit.material.blending = isDark ? AdditiveBlending : NormalBlending;
+      orbit.material.needsUpdate = true;
+    }
+    nebula.visible = isDark;
     atmosphere.visible = isDark;
     innerGlow.visible = isDark;
     stars.visible = isDark;
@@ -211,12 +315,18 @@ export async function startGlobe(canvas: HTMLCanvasElement) {
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
     camera.updateProjectionMatrix();
+    nebula.material.uniforms.uAspect.value = camera.aspect;
     viewHeight = 2 * Math.tan((FOV * Math.PI) / 360) * CAMERA_Z;
     viewWidth = viewHeight * camera.aspect;
     waypoints = readWaypoints();
   }
 
   const current = { ...DEFAULT_POSE, ...poseAt(waypoints, scrollY + innerHeight / 2) };
+  if (!isReducedMotion) {
+    current.y -= INTRO_DROP;
+    current.scale *= INTRO_SCALE;
+    current.opacity = 0;
+  }
   const pointer = { x: 0, y: 0, currentX: 0, currentY: 0 };
   const homeAngle = (-196 * Math.PI) / 180;
   const homeTilt = (HO_CHI_MINH[0] * Math.PI) / 180;
@@ -248,7 +358,12 @@ export async function startGlobe(canvas: HTMLCanvasElement) {
     spinner.rotation.x = homeTilt + Math.max(current.y * 0.72, MAX_UP_TILT) + pointer.currentY * 0.1;
 
     stars.material.uniforms.uTime.value = seconds;
-    stars.position.y = scrollProgress * 2;
+    stars.position.set(-pointer.currentX * 0.12, scrollProgress * 2 + pointer.currentY * 0.08, 0);
+    dots.material.uniforms.uTime.value = seconds;
+    nebula.material.uniforms.uTime.value = seconds;
+    nebula.material.uniforms.uShift.value = scrollProgress;
+    nebula.material.uniforms.uPointer.value.set(pointer.currentX, -pointer.currentY, 0);
+    for (const orbit of orbits) orbit.material.uniforms.uTime.value = seconds;
 
     for (let i = 0; i < PACKET_COUNT; i++) {
       curve.getPoint((seconds * 0.22 + i / PACKET_COUNT) % 1).toArray(packetPositions, i * 3);

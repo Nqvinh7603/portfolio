@@ -48,6 +48,8 @@ const ogImage = new URL("/og.png", Astro.site);
   </head>
   <body class="bg-background font-sans text-foreground">
     <canvas data-globe-canvas class="pointer-events-none fixed inset-0 -z-10 h-svh w-full opacity-0 print:hidden" aria-hidden="true"></canvas>
+    <div data-aura class="print:hidden" aria-hidden="true"></div>
+    <div class="grain print:hidden" aria-hidden="true"></div>
     <div data-boot class="fixed inset-0 z-[60] place-content-center justify-items-center gap-4 bg-background print:hidden" aria-hidden="true">
       <p class="text-sm tracking-[0.3em] text-muted">VINHNQ.COM</p>
       <p class="text-6xl font-light tabular-nums text-foreground" data-boot-count>000</p>

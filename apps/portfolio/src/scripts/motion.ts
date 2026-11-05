@@ -56,14 +56,15 @@ function revealOnScroll() {
 }
 
 function countUp(element: HTMLElement) {
-  const match = element.textContent?.match(/^(\d{1,2})(\D.*)$/);
+  const match = element.textContent?.match(/^(\d{1,2})(\D.*)?$/);
   if (!match) return;
   const target = Number(match[1]);
+  const suffix = match[2] ?? "";
   const startedAt = performance.now();
   const frame = (now: number) => {
     const progress = Math.min((now - startedAt) / COUNT_MS, 1);
     const eased = 1 - (1 - progress) ** 3;
-    element.textContent = `${Math.round(target * eased)}${match[2]}`;
+    element.textContent = `${Math.round(target * eased)}${suffix}`;
     if (progress < 1) requestAnimationFrame(frame);
   };
   requestAnimationFrame(frame);
@@ -165,6 +166,30 @@ function runBootCounter() {
   } catch {}
 }
 
+// Đồng hồ giờ Việt Nam ở đầu trang, cập nhật theo phút.
+function runClock() {
+  const clock = document.querySelector<HTMLTimeElement>("[data-clock]");
+  if (!clock) return;
+  const format = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Ho_Chi_Minh" });
+  const update = () => {
+    const now = new Date();
+    clock.textContent = `${format.format(now)} GMT+7`;
+    clock.dateTime = now.toISOString();
+  };
+  update();
+  clock.parentElement?.removeAttribute("hidden");
+  setInterval(update, 30_000);
+}
+
+async function bootScrollEffects() {
+  try {
+    const { startScrollEffects } = await import("./scroll");
+    startScrollEffects();
+  } catch {
+    // Không tải được thì trang vẫn cuộn thường, nội dung không ảnh hưởng.
+  }
+}
+
 async function bootGlobe() {
   const canvas = document.querySelector<HTMLCanvasElement>("[data-globe-canvas]");
   if (!canvas) return;
@@ -180,10 +205,12 @@ async function bootGlobe() {
 trackScroll();
 trackSections();
 followPointerOnCards();
+runClock();
 if (!isReducedMotion) {
   runBootCounter();
   revealOnScroll();
   countWhenVisible();
+  bootScrollEffects();
   if (!isTouch) {
     magnetizeButtons();
   }

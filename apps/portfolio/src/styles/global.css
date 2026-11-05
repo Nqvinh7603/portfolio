@@ -393,8 +393,14 @@ body {
 /* Chuyển động: chỉ transform và opacity, tắt hết khi người xem bật giảm chuyển động.
    Lớp .js do script đầu trang gắn, nên không có JavaScript thì nội dung vẫn hiện đủ. */
 @keyframes rise {
-  from { opacity: 0; transform: translateY(0.45em); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(0.55em) rotateX(-70deg); filter: blur(8px); }
+  to { opacity: 1; transform: translateY(0) rotateX(0); filter: blur(0); }
+}
+@keyframes spin {
+  to { rotate: 360deg; }
+}
+@keyframes ping {
+  to { transform: scale(2.8); opacity: 0; }
 }
 @keyframes enter {
   from { opacity: 0; transform: translateY(16px); }
@@ -447,6 +453,49 @@ a:hover > .arrow { translate: 3px 0; }
 [data-spotlight]:hover { border-color: color-mix(in srgb, var(--primary) 50%, transparent); }
 [data-spotlight]:hover::before { opacity: 1; }
 
+/* Dải chữ rỗng cỡ lớn, chạy ngược chiều dải phía trên. Rê vào thì chữ đặc lại. */
+.marquee-outline span:not(.rotate-45) { color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--foreground) 34%, transparent); transition: color 0.3s; }
+.marquee-outline span:not(.rotate-45):hover { color: var(--foreground); }
+
+/* Chấm xanh nhấp nháy cạnh đồng hồ. */
+.live-dot { position: relative; flex: none; width: 8px; height: 8px; border-radius: 9999px; background: var(--success); }
+.live-dot::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: inherit; }
+
+/* Vòng sáng quay quanh ảnh đại diện, kèm quầng mờ phía sau. */
+.avatar-ring { position: relative; isolation: isolate; padding: 3px; border-radius: 9999px; }
+.avatar-ring::before, .avatar-ring::after { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: conic-gradient(#6366f1, #a78bfa, transparent 58%, #6366f1); }
+.avatar-ring::after { inset: -6px; filter: blur(14px); opacity: 0.55; }
+
+.stat-number { background: linear-gradient(180deg, var(--foreground) 30%, color-mix(in srgb, var(--foreground) 45%, var(--primary))); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.focus-row dt { transition: color 0.25s, translate 0.25s; }
+.focus-row:hover dt { color: var(--primary); translate: 4px 0; }
+
+/* Thẻ dự án: nền đặc, không kính mờ, để thẻ trên che hẳn thẻ dưới khi xếp chồng.
+   Thẻ lùi ra sau thì tối đi nhờ lớp phủ, không hạ opacity của thẻ: hạ opacity là lộ thẻ nằm dưới. */
+.stack-card { background: var(--surface); box-shadow: 0 -24px 60px -36px rgb(0 0 0 / 0.55); }
+.stack-shade { position: absolute; inset: -1px; z-index: 2; border-radius: inherit; background: var(--background); opacity: 0; pointer-events: none; }
+
+/* Dòng thời gian: đường dọc tô dần theo cuộn, chấm sáng lên khi tới mục đó. */
+.timeline { position: relative; padding-left: 1.75rem; }
+.timeline-track { position: absolute; top: 0; bottom: 0; left: 5px; width: 1px; background: var(--border-strong); }
+.timeline-track > span { position: absolute; inset: 0; transform-origin: top; background: linear-gradient(180deg, #6366f1, #a78bfa); box-shadow: 0 0 12px 1px rgb(124 92 246 / 0.7); }
+.timeline-item { position: relative; transition: opacity 0.4s; }
+.timeline-item::before { content: ""; position: absolute; top: 30px; left: calc(1px - 1.75rem); width: 9px; height: 9px; border-radius: 9999px; background: var(--primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent), 0 0 16px 2px color-mix(in srgb, var(--primary) 70%, transparent); transition: background-color 0.4s, box-shadow 0.4s, scale 0.4s; }
+.has-scroll-fx .timeline-item:not(.is-active) { opacity: 0.45; }
+.has-scroll-fx .timeline-item:not(.is-active)::before { scale: 0.8; background: var(--background); box-shadow: 0 0 0 1px var(--border-strong); }
+.timeline-company { transition: translate 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.timeline-item:hover .timeline-company { translate: 6px 0; }
+@media (min-width: 1024px) {
+  .timeline-item::before { top: 38px; }
+}
+
+/* Quầng sáng đi theo con trỏ, chỉ ở nền tối và máy có chuột. */
+[data-aura] { position: fixed; top: 0; left: 0; z-index: -5; width: 640px; height: 640px; margin: -320px 0 0 -320px; border-radius: 9999px; background: radial-gradient(closest-side, rgb(124 92 246 / 0.17), rgb(99 102 241 / 0.07) 45%, transparent 72%); opacity: 0; pointer-events: none; transition: opacity 0.6s; }
+.dark [data-aura].is-on { opacity: 1; }
+
+/* Lớp hạt nhiễu mỏng phủ cả trang, làm mềm các dải chuyển màu. */
+.grain { position: fixed; inset: 0; z-index: 45; opacity: 0.055; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
 /* Màn khởi động: chỉ lần đầu trong phiên. Có hẹn giờ CSS để không bao giờ kẹt, kể cả khi JavaScript lỗi. */
 [data-boot] { display: none; }
 @keyframes boot-out { to { opacity: 0; visibility: hidden; } }
@@ -467,6 +516,15 @@ a:hover > .arrow { translate: 3px 0; }
   .marquee:hover .marquee-track { animation-play-state: paused; }
   [data-sim-log] li { animation: log-in 0.3s ease-out both; }
   .scroll-cue svg { animation: cue-bob 1.6s ease-in-out infinite; }
+  .marquee-outline .marquee-track { animation-duration: 70s; animation-direction: reverse; }
+  .live-dot::after { animation: ping 1.8s ease-out infinite; }
+  .avatar-ring::before, .avatar-ring::after { animation: spin 6s linear infinite; }
+  [data-hero] { will-change: transform, opacity; }
+  /* Lenis tự cuộn mượt; để trình duyệt cuộn mượt thêm lần nữa thì hai bên giành nhau. */
+  html.lenis { scroll-behavior: auto; }
+  @media (min-width: 1024px) {
+    .has-scroll-fx .stack-card { position: sticky; top: var(--stick, 88px); will-change: transform; }
+  }
 
   .js [data-reveal]:not(.char-title) { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); transition-delay: var(--delay, 0ms); }
   .js [data-reveal]:not(.char-title).is-visible { opacity: 1; transform: none; }
@@ -477,6 +535,7 @@ a:hover > .arrow { translate: 3px 0; }
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { flex-wrap: wrap; width: auto; }
   .marquee-copy { display: none; }
+  .marquee-outline { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
