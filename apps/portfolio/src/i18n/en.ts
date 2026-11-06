@@ -68,7 +68,7 @@ export const en: Content = {
     ],
     experienceTitle: "Experience",
     educationTitle: "Education & certification",
-    note: "Contact: contact@vinhnq.com · vinhnq.com · github.com/Nqvinh7603 · linkedin.com/in/nqvinh76",
+    note: "Contact: contact@vinhnq.com · portfolio.vinhnq.com · github.com/Nqvinh7603 · linkedin.com/in/nqvinh76",
   },
   notFound: { title: "This route doesn't resolve.", body: "The page you are looking for does not exist or has moved." },
   jobs: [

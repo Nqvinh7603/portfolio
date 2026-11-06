@@ -1,8 +1,0 @@
-{
-  "name": "@vinhnq/redirect",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "deploy": "wrangler deploy"
-  }
-}

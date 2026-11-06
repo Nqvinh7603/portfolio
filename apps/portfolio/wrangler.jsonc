@@ -5,5 +5,5 @@
     "directory": "./dist",
     "not_found_handling": "404-page"
   },
-  "routes": [{ "pattern": "vinhnq.com", "custom_domain": true }]
+  "routes": [{ "pattern": "portfolio.vinhnq.com", "custom_domain": true }]
 }

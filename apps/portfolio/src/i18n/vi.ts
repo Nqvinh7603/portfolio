@@ -68,7 +68,7 @@ export const vi: Content = {
     ],
     experienceTitle: "Kinh nghiệm",
     educationTitle: "Học vấn và chứng chỉ",
-    note: "Liên hệ: contact@vinhnq.com · vinhnq.com · github.com/Nqvinh7603 · linkedin.com/in/nqvinh76",
+    note: "Liên hệ: contact@vinhnq.com · portfolio.vinhnq.com · github.com/Nqvinh7603 · linkedin.com/in/nqvinh76",
   },
   notFound: { title: "Không tìm thấy đường dẫn này.", body: "Trang bạn tìm không tồn tại hoặc đã được chuyển đi." },
   jobs: [

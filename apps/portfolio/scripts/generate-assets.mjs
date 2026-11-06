@@ -20,7 +20,7 @@ await page.evaluate(() => {
   document.body.innerHTML = `<div style="width:1200px;height:630px;display:flex;flex-direction:column;justify-content:center;padding:0 80px;box-sizing:border-box;background:#05060f;color:#e9edf5">
     <p style="margin:0 0 20px;font-size:30px;font-weight:500;color:#a0a8bb">Backend Engineer</p>
     <h1 style="margin:0;font-size:112px;line-height:1.05;letter-spacing:-.02em;font-weight:600">Nguyen Quang Vinh</h1>
-    <p style="margin:28px 0 0;font-size:30px;font-weight:500;color:#a5b4fc">vinhnq.com</p></div>`;
+    <p style="margin:28px 0 0;font-size:30px;font-weight:500;color:#a5b4fc">portfolio.vinhnq.com</p></div>`;
 });
 await page.evaluate(() => document.fonts.ready);
 await page.screenshot({ path: "public/og.png" });

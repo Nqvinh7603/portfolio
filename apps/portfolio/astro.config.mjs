@@ -3,7 +3,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  site: "https://vinhnq.com",
+  site: "https://portfolio.vinhnq.com",
   i18n: {
     defaultLocale: "en",
     locales: ["en", "vi"],
