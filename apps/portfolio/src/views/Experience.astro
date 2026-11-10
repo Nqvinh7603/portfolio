@@ -39,6 +39,26 @@ const nameToSlug = new Map(content.projects.map((project) => [project.name, proj
     ))
   }
 </ol>
+<section class="grid gap-6 border-t border-border-strong py-12 lg:py-16">
+  <h2 class="text-lg font-semibold text-foreground">{experience.openSourceTitle}</h2>
+  <ul class="grid">
+    {
+      experience.openSource.map((item) => (
+        <li data-reveal class="grid gap-3 border-t border-border-strong py-5 lg:grid-cols-[220px_minmax(0,1fr)_minmax(0,1fr)] lg:gap-8">
+          <p class="text-sm text-muted">{item.date}</p>
+          <div class="grid content-start gap-1">
+            <h3 class="text-base font-semibold text-foreground">{item.project}</h3>
+            <p class="text-sm text-muted">{item.language}</p>
+          </div>
+          <div class="grid content-start gap-2">
+            <p class="text-base leading-relaxed text-pretty text-muted">{item.note}</p>
+            <a class="inline-flex min-h-8 w-fit items-center text-sm text-muted underline decoration-foreground/30 underline-offset-4 hover:text-foreground" href={item.url} target="_blank" rel="noopener">{item.label}</a>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</section>
 <section class="grid gap-10 border-t border-border-strong py-12 lg:grid-cols-2 lg:gap-16 lg:py-16">
   <div class="grid content-start gap-4">
     <h2 class="text-lg font-semibold text-foreground">{experience.awardsTitle}</h2>

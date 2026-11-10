@@ -16,6 +16,8 @@ export type Project = {
 
 export type Job = { company: string; title: string; date: string; note: string; projects: string };
 
+export type OpenSourceContribution = { project: string; language: string; date: string; note: string; label: string; url: string };
+
 export type Scenario = { label: string; logs: string[] };
 
 export type Content = {
@@ -29,7 +31,7 @@ export type Content = {
   facts: [string, string][];
   about: { title: string; body: string; focus: [string, string][] };
   work: { title: string };
-  experience: { title: string; pageTitle: string; pageIntro: string; awardsTitle: string; awards: string[]; educationTitle: string; education: { school: string; detail: string; date: string }[] };
+  experience: { title: string; pageTitle: string; pageIntro: string; openSourceTitle: string; openSource: OpenSourceContribution[]; awardsTitle: string; awards: string[]; educationTitle: string; education: { school: string; detail: string; date: string }[] };
   contact: { title: string };
   simulation: { title: string; intro: string; caption: string; label: string; scenarios: { request: Scenario; lost: Scenario; release: Scenario } };
   projectsPage: { title: string; intro: string };

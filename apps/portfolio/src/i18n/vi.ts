@@ -31,6 +31,12 @@ export const vi: Content = {
     title: "Kinh nghiệm *làm việc*",
     pageTitle: "Kinh nghiệm",
     pageIntro: "Ba năm làm Java backend, từ các nền tảng ngân hàng đến sản phẩm SaaS cho khách hàng Hàn Quốc.",
+    openSourceTitle: "Đóng góp mã nguồn mở",
+    openSource: [
+      { project: "OpenSearch", language: "Java", date: "11/2026", note: "Ngăn mật khẩu Kafka và các cấu hình nhạy cảm bị ghi vào log của ingestion consumer, dùng cơ chế che cấu hình có sẵn của Kafka.", label: "#23584", url: "https://github.com/opensearch-project/OpenSearch/pull/23584" },
+      { project: "ureq", language: "Rust", date: "11/2026", note: "Giúp HTTP client thử địa chỉ tiếp theo khi kết nối lỗi NetworkDown, thay vì dừng luôn request.", label: "#1230", url: "https://github.com/algesten/ureq/pull/1230" },
+      { project: "OpenAPI Generator", language: "Java", date: "11/2026", note: "Bổ sung các annotation @Nullable còn thiếu cho additionalProperties, equals và toIndentedString trong template Java khi bật useJspecify.", label: "#25586", url: "https://github.com/OpenAPITools/openapi-generator/pull/25586" },
+    ],
     awardsTitle: "Ghi nhận",
     awards: ["Highest Potential Employee 2025, Unit Technology Corporation", "Thành viên Most Productive Team 2025, Unit Technology Corporation"],
     educationTitle: "Học vấn và chứng chỉ",
