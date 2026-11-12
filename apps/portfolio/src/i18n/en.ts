@@ -36,6 +36,7 @@ export const en: Content = {
       { project: "OpenSearch", language: "Java", date: "11/2026", note: "Stopped Kafka passwords and other sensitive settings from being written to the ingestion consumer log, using Kafka's own config redaction.", label: "#23584", url: "https://github.com/opensearch-project/OpenSearch/pull/23584" },
       { project: "ureq", language: "Rust", date: "11/2026", note: "Made the HTTP client try the next resolved address when a connection fails with NetworkDown, instead of giving up on the request.", label: "#1230", url: "https://github.com/algesten/ureq/pull/1230" },
       { project: "OpenAPI Generator", language: "Java", date: "11/2026", note: "Added the missing @Nullable annotations for additionalProperties, equals and toIndentedString in the Java templates when useJspecify is on.", label: "#25586", url: "https://github.com/OpenAPITools/openapi-generator/pull/25586" },
+      { project: "ArcadeDB", language: "Java", date: "11/2026", note: "Made the MongoDB-compatible server advertise wire version 9, so current PyMongo 4.x drivers can connect instead of being refused.", label: "#11374", url: "https://github.com/ArcadeData/arcadedb/pull/11374" },
     ],
     awardsTitle: "Recognition",
     awards: ["Highest Potential Employee 2025, Unit Technology Corporation", "Member of the Most Productive Team 2025, Unit Technology Corporation"],
