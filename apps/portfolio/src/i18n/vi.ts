@@ -7,7 +7,7 @@ export const vi: Content = {
     description: "Java Backend Engineer. Kinh nghiệm thanh toán liên ngân hàng, chữ ký số và SaaS đa tenant, từ phát triển đến vận hành production.",
   },
   nav: { projects: "Dự án", experience: "Kinh nghiệm", resume: "CV", contact: "Liên hệ", menu: "Mở menu", theme: "Đổi giao diện sáng tối", language: "View in English", skip: "Chuyển đến nội dung", source: "Mã nguồn trang" },
-  actions: { downloadCv: "Tải CV", viewProjects: "Xem dự án", caseStudy: "Đọc case study", visitSite: "Xem trang web", allProjects: "Tất cả 9 dự án", fullExperience: "Toàn bộ kinh nghiệm và học vấn", print: "In", backToProjects: "Tất cả dự án", home: "Về trang chủ", viewArchitecture: "Xem kiến trúc", seeSimulation: "Xem luồng này chạy" },
+  actions: { downloadCv: "Tải CV", viewProjects: "Xem dự án", caseStudy: "Đọc case study", visitSite: "Xem trang web", allProjects: "Tất cả 10 dự án", fullExperience: "Toàn bộ kinh nghiệm và học vấn", print: "In", backToProjects: "Tất cả dự án", home: "Về trang chủ", viewArchitecture: "Xem kiến trúc", seeSimulation: "Xem luồng này chạy" },
   cvFile: "/NguyenQuangVinh_CV_VI.pdf",
   hero: {
     eyebrow: "Backend Engineer",
@@ -15,7 +15,7 @@ export const vi: Content = {
     location: "Làm việc tại Việt Nam",
   },
   labels: { about: "Hồ sơ", simulation: "Demo trực tiếp", work: "Case study", experience: "Sự nghiệp", contact: "Kết nối" },
-  facts: [["3 năm", "kinh nghiệm backend"], ["9 dự án", "ngân hàng, fintech, SaaS"], ["2 nền tảng", "phụ trách release production"], ["Giải thưởng 2025", "Highest Potential Employee"]],
+  facts: [["3 năm", "kinh nghiệm backend"], ["10 dự án", "ngân hàng, fintech, SaaS"], ["2 nền tảng", "phụ trách release production"], ["Giải thưởng 2025", "Highest Potential Employee"]],
   about: {
     title: "Về *tôi*",
     body: "Tôi đi lên từ ngân hàng và fintech, nơi giao dịch trùng hay callback bị mất đều gây hậu quả thật. Tôi cũng phụ trách release production và xử lý lỗi trên môi trường đang chạy.",
@@ -58,7 +58,7 @@ export const vi: Content = {
       release: { label: "Release", logs: ["GitLab CI đẩy image lên ECR", "ECS Fargate deploy image mới", "Release hoàn tất"] },
     },
   },
-  projectsPage: { title: "Dự án", intro: "Chín dự án về ngân hàng, chữ ký số và SaaS. Thông tin khách hàng chỉ dừng ở mức kỹ thuật chung." },
+  projectsPage: { title: "Dự án", intro: "Mười dự án về ngân hàng, chữ ký số, SaaS và IoT. Thông tin khách hàng chỉ dừng ở mức kỹ thuật chung." },
   caseStudy: { problem: "Bài toán", architecture: "Kiến trúc", delivered: "Công việc đã làm", decisions: "Quyết định chính", stack: "Công nghệ", simplified: "Sơ đồ đã giản lược, không có chi tiết nội bộ của khách hàng." },
   resume: {
     title: "CV",
@@ -79,7 +79,7 @@ export const vi: Content = {
   },
   notFound: { title: "Không tìm thấy đường dẫn này.", body: "Trang bạn tìm không tồn tại hoặc đã được chuyển đi." },
   jobs: [
-    { company: "Wala-ICT", title: "Backend Software Engineer", date: "04/2026 – Hiện tại", note: "Phát triển sản phẩm cho khách hàng Hàn Quốc. Backend chính của một SaaS đa tenant, phụ trách release production cho các nền tảng đang chạy.", projects: "BitBuild · S-Space · Miribom" },
+    { company: "Wala-ICT", title: "Backend Software Engineer", date: "04/2026 – Hiện tại", note: "Phát triển sản phẩm cho khách hàng Hàn Quốc. Backend chính của một SaaS đa tenant, phụ trách release production cho các nền tảng đang chạy.", projects: "BitBuild · S-Space · Miribom · Thinkware" },
     { company: "Unit Technology Corporation", title: "Backend Software Engineer, R&D", date: "11/2024 – 03/2026", note: "Giải pháp chữ ký số và ngân hàng. Highest Potential Employee 2025, Most Productive Team 2025.", projects: "Signature Hub · Paperless · Easy Doc · ACH Gateway · JCanary Core" },
     { company: "Laptrinhjavaweb", title: "Backend Developer", date: "09/2023 – 10/2024", note: "Phát triển backend Java.", projects: "Java · Spring Boot" },
     { company: "Straffico", title: "Freelance Backend Engineer", date: "08/2025 – Hiện tại", note: "Nền tảng quản lý dự án và chi phí cho doanh nghiệp xây dựng. Phát triển tính năng backend và quy trình release production blue-green.", projects: "Straffico" },
@@ -155,6 +155,16 @@ export const vi: Content = {
         "Xây dựng luồng hoàn tiền và thanh toán thẻ cho tiền đặt cọc với Toss Payments.",
       ],
       stack: ["Java 21", "Axon", "PostgreSQL", "GitLab CI"],
+    },
+    {
+      slug: "thinkware", name: "Thinkware Payback", company: "Wala-ICT", domain: "Máy xử lý rác thực phẩm IoT với điểm hoàn tiền", role: "Backend Engineer", meta: "Thiết bị Bluevent ID · AWS IoT",
+      problem: "Mỗi lượt chạy của máy đến dưới dạng event thiết bị có thể lặp hoặc lộn thứ tự, và mỗi lượt được quy ra điểm để chi trả.",
+      points: [
+        "Sửa lỗi trả điểm hai lần khi event bước chạy đến trễ, lộn thứ tự qua SQS làm mở lại session và tính một lượt hai lần: ranh giới lượt chạy giờ theo thời gian của event, không theo thứ tự đến.",
+        "Sửa lỗi session đang mở cache trong Redis nhưng đã đóng trong database, và xếp thống kê theo kỳ theo thời điểm hoàn tất lượt chạy cho khớp với điểm.",
+        "Xây dựng các API Payback cho app: trạng thái subscription theo từng máy, điểm bỏ lỡ tháng này và 12 tháng cho người chưa đăng ký với cùng quy tắc làm tròn và trần như settlement, chi tiết từng dòng lịch sử và ngày chốt trên khoản chi trả.",
+      ],
+      stack: ["Java 21", "PostgreSQL", "Redis", "AWS IoT"],
     },
     {
       slug: "paperless", name: "Paperless", company: "Unit Technology Corporation", domain: "Module chữ ký số", role: "Backend chính của module ký", meta: "Team 6 người",

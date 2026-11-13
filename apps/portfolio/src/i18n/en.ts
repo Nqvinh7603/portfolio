@@ -7,7 +7,7 @@ export const en: Content = {
     description: "Java Backend Engineer. Interbank payments, digital signature, and multi-tenant SaaS, taken all the way to production.",
   },
   nav: { projects: "Projects", experience: "Experience", resume: "Résumé", contact: "Contact", menu: "Open menu", theme: "Toggle theme", language: "Xem bằng tiếng Việt", skip: "Skip to content", source: "Site source" },
-  actions: { downloadCv: "Download CV", viewProjects: "View projects", caseStudy: "Read case study", visitSite: "Visit site", allProjects: "All 9 projects", fullExperience: "Full experience & education", print: "Print", backToProjects: "All projects", home: "Back home", viewArchitecture: "View architecture", seeSimulation: "Watch this flow run" },
+  actions: { downloadCv: "Download CV", viewProjects: "View projects", caseStudy: "Read case study", visitSite: "Visit site", allProjects: "All 10 projects", fullExperience: "Full experience & education", print: "Print", backToProjects: "All projects", home: "Back home", viewArchitecture: "View architecture", seeSimulation: "Watch this flow run" },
   cvFile: "/NguyenQuangVinh_CV_EN.pdf",
   hero: {
     eyebrow: "Backend Engineer",
@@ -15,7 +15,7 @@ export const en: Content = {
     location: "Based in Vietnam",
   },
   labels: { about: "Profile", simulation: "Live demo", work: "Case studies", experience: "Career", contact: "Say hello" },
-  facts: [["3 years", "backend engineering"], ["9 projects", "banking, fintech, SaaS"], ["2 platforms", "released to production"], ["2025 award", "Highest Potential Employee"]],
+  facts: [["3 years", "backend engineering"], ["10 projects", "banking, fintech, SaaS"], ["2 platforms", "released to production"], ["2025 award", "Highest Potential Employee"]],
   about: {
     title: "About *me*",
     body: "My background is banking and fintech, where duplicates and lost callbacks have a real cost. I also handle production releases and debug the live environment.",
@@ -58,7 +58,7 @@ export const en: Content = {
       release: { label: "Release", logs: ["GitLab CI pushes the image to ECR", "ECS Fargate deploys the new image", "Release finished"] },
     },
   },
-  projectsPage: { title: "Projects", intro: "Nine projects across banking, digital signature, and SaaS. Client details stay at the level of public engineering practice." },
+  projectsPage: { title: "Projects", intro: "Ten projects across banking, digital signature, SaaS, and IoT. Client details stay at the level of public engineering practice." },
   caseStudy: { problem: "The problem", architecture: "Architecture", delivered: "What I delivered", decisions: "Key decisions", stack: "Stack", simplified: "Simplified view, no client internals." },
   resume: {
     title: "Résumé",
@@ -79,7 +79,7 @@ export const en: Content = {
   },
   notFound: { title: "This route doesn't resolve.", body: "The page you are looking for does not exist or has moved." },
   jobs: [
-    { company: "Wala-ICT", title: "Backend Software Engineer", date: "04/2026 – Present", note: "Software products for Korean clients. Main backend engineer of a multi-tenant SaaS, responsible for production releases of live platforms.", projects: "BitBuild · S-Space · Miribom" },
+    { company: "Wala-ICT", title: "Backend Software Engineer", date: "04/2026 – Present", note: "Software products for Korean clients. Main backend engineer of a multi-tenant SaaS, responsible for production releases of live platforms.", projects: "BitBuild · S-Space · Miribom · Thinkware" },
     { company: "Unit Technology Corporation", title: "Backend Software Engineer, R&D", date: "11/2024 – 03/2026", note: "Digital signature and banking solutions. Highest Potential Employee 2025, Most Productive Team 2025.", projects: "Signature Hub · Paperless · Easy Doc · ACH Gateway · JCanary Core" },
     { company: "Laptrinhjavaweb", title: "Backend Developer", date: "09/2023 – 10/2024", note: "Java backend development.", projects: "Java · Spring Boot" },
     { company: "Straffico", title: "Freelance Backend Engineer", date: "08/2025 – Present", note: "Project and cost control platform for construction companies. Backend features and the blue-green production release pipeline.", projects: "Straffico" },
@@ -155,6 +155,16 @@ export const en: Content = {
         "Delivered refund flows and card payment for deposits with Toss Payments.",
       ],
       stack: ["Java 21", "Axon", "PostgreSQL", "GitLab CI"],
+    },
+    {
+      slug: "thinkware", name: "Thinkware Payback", company: "Wala-ICT", domain: "IoT food-waste disposer with payback points", role: "Backend Engineer", meta: "Bluevent ID devices · AWS IoT",
+      problem: "Disposer runs arrive as device events that can repeat or come out of order, and every run turns into points that are paid out.",
+      points: [
+        "Fixed a double-payout bug where a late, out-of-order step event from SQS restarted the session and counted one run twice: run boundaries now follow event time, not arrival order.",
+        "Fixed a Redis-cached open session that was already closed in the database, and aligned period statistics with the points on the run's completion time.",
+        "Built the app's Payback APIs: subscription status per device, monthly and 12-month missed points for non-subscribers using the same rounding and cap as settlement, and line detail with settlement dates on payouts.",
+      ],
+      stack: ["Java 21", "PostgreSQL", "Redis", "AWS IoT"],
     },
     {
       slug: "paperless", name: "Paperless", company: "Unit Technology Corporation", domain: "Digital signature module", role: "Main backend of the signing module", meta: "Team of 6",
