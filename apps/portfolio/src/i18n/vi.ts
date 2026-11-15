@@ -37,6 +37,7 @@ export const vi: Content = {
       { project: "ureq", language: "Rust", date: "11/2026", note: "Giúp HTTP client thử địa chỉ tiếp theo khi kết nối lỗi NetworkDown, thay vì dừng luôn request.", label: "#1230", url: "https://github.com/algesten/ureq/pull/1230" },
       { project: "OpenAPI Generator", language: "Java", date: "11/2026", note: "Bổ sung các annotation @Nullable còn thiếu cho additionalProperties, equals và toIndentedString trong template Java khi bật useJspecify.", label: "#25586", url: "https://github.com/OpenAPITools/openapi-generator/pull/25586" },
       { project: "ArcadeDB", language: "Java", date: "11/2026", note: "Cho server tương thích MongoDB khai báo wire version 9, để PyMongo 4.x hiện tại kết nối được thay vì bị từ chối.", label: "#11374", url: "https://github.com/ArcadeData/arcadedb/pull/11374" },
+      { project: "mongo-java-server", language: "Java", date: "11/2026", note: "Hỗ trợ cờ OP_MSG moreToCome, để lệnh ghi không cần xác nhận (w=0) được thực hiện thay vì bị bỏ qua âm thầm.", label: "#257", url: "https://github.com/bwaldvogel/mongo-java-server/pull/257" },
     ],
     awardsTitle: "Ghi nhận",
     awards: ["Highest Potential Employee 2025, Unit Technology Corporation", "Thành viên Most Productive Team 2025, Unit Technology Corporation"],
