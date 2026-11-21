@@ -38,6 +38,8 @@ export const vi: Content = {
       { project: "OpenAPI Generator", language: "Java", date: "11/2026", note: "Bổ sung các annotation @Nullable còn thiếu cho additionalProperties, equals và toIndentedString trong template Java khi bật useJspecify.", label: "#25586", url: "https://github.com/OpenAPITools/openapi-generator/pull/25586" },
       { project: "ArcadeDB", language: "Java", date: "11/2026", note: "Cho server tương thích MongoDB khai báo wire version 9, để PyMongo 4.x hiện tại kết nối được thay vì bị từ chối.", label: "#11374", url: "https://github.com/ArcadeData/arcadedb/pull/11374" },
       { project: "mongo-java-server", language: "Java", date: "11/2026", note: "Hỗ trợ cờ OP_MSG moreToCome, để lệnh ghi không cần xác nhận (w=0) được thực hiện thay vì bị bỏ qua âm thầm.", label: "#257", url: "https://github.com/bwaldvogel/mongo-java-server/pull/257" },
+      { project: "ArcadeDB", language: "Java", date: "11/2026", note: "Sửa lỗi lệnh ghi không cần xác nhận (w=0) bị mất âm thầm trên giao thức MongoDB, lỗi do tôi báo cáo và được giao xử lý (mức nghiêm trọng: major).", label: "#11376", url: "https://github.com/ArcadeData/arcadedb/pull/11376" },
+      { project: "Kiri", language: "Rust", date: "11/2026", note: "Giữ file log launchd của container engine trên macOS dưới 5 MiB, vẫn giữ các dòng cuối trước khi crash cho báo cáo chẩn đoán.", label: "#504", url: "https://github.com/libracoder/kiri/pull/504" },
     ],
     awardsTitle: "Ghi nhận",
     awards: ["Highest Potential Employee 2025, Unit Technology Corporation", "Thành viên Most Productive Team 2025, Unit Technology Corporation"],

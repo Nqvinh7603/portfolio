@@ -38,6 +38,8 @@ export const en: Content = {
       { project: "OpenAPI Generator", language: "Java", date: "11/2026", note: "Added the missing @Nullable annotations for additionalProperties, equals and toIndentedString in the Java templates when useJspecify is on.", label: "#25586", url: "https://github.com/OpenAPITools/openapi-generator/pull/25586" },
       { project: "ArcadeDB", language: "Java", date: "11/2026", note: "Made the MongoDB-compatible server advertise wire version 9, so current PyMongo 4.x drivers can connect instead of being refused.", label: "#11374", url: "https://github.com/ArcadeData/arcadedb/pull/11374" },
       { project: "mongo-java-server", language: "Java", date: "11/2026", note: "Accepted the OP_MSG moreToCome flag, so unacknowledged (w=0) writes are applied instead of silently dropped.", label: "#257", url: "https://github.com/bwaldvogel/mongo-java-server/pull/257" },
+      { project: "ArcadeDB", language: "Java", date: "11/2026", note: "Fixed unacknowledged (w=0) writes being silently lost on the MongoDB wire, an issue I reported and was assigned (severity: major).", label: "#11376", url: "https://github.com/ArcadeData/arcadedb/pull/11376" },
+      { project: "Kiri", language: "Rust", date: "11/2026", note: "Kept the container engine's launchd log on macOS under 5 MiB, keeping the last lines before a crash for diagnostic reports.", label: "#504", url: "https://github.com/libracoder/kiri/pull/504" },
     ],
     awardsTitle: "Recognition",
     awards: ["Highest Potential Employee 2025, Unit Technology Corporation", "Member of the Most Productive Team 2025, Unit Technology Corporation"],
