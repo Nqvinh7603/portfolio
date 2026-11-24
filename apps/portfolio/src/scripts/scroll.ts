@@ -3,11 +3,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 
-const STACK_TOP = 88;
-const STACK_STEP = 12;
-const STACK_BOTTOM_GAP = 24;
-const STACK_REST_SCALE = 0.94;
-const STACK_SHADE_OPACITY = 0.62;
 // Cuộn càng nhanh thì dải chữ chạy càng nhanh, tối đa gấp MARQUEE_MAX_RATE lần.
 const MARQUEE_MAX_RATE = 7;
 const MARQUEE_VELOCITY_PER_RATE = 14;
@@ -30,33 +25,6 @@ function fadeHeroOut() {
 function lightWordsOnScroll() {
   document.querySelectorAll<HTMLElement>("[data-scrub-words]").forEach((block) => {
     gsap.fromTo(block.querySelectorAll("[data-word]"), { opacity: 0.16 }, { opacity: 1, ease: "none", stagger: 0.1, scrollTrigger: { trigger: block, start: "top 82%", end: "bottom 50%", scrub: 0.4 } });
-  });
-}
-
-function stackCards() {
-  const cards = gsap.utils.toArray<HTMLElement>("[data-stack-card]");
-  if (cards.length < 2) return;
-  // Thẻ chỉ xếp chồng ở màn rộng; màn hẹp thẻ dài hơn màn nên để cuộn thường.
-  gsap.matchMedia().add("(min-width: 1024px)", () => {
-    for (const card of cards) card.style.minHeight = "";
-    const height = Math.max(...cards.map((card) => card.offsetHeight));
-    cards.forEach((card, index) => {
-      card.style.minHeight = `${height}px`;
-      // Thẻ cao hơn phần màn còn lại thì dính theo mép dưới, để không bị cắt đáy.
-      const top = Math.min(STACK_TOP + index * STACK_STEP, innerHeight - height - STACK_BOTTOM_GAP);
-      card.style.setProperty("--stick", `${top}px`);
-      const next = cards[index + 1];
-      if (!next) return;
-      const scrollTrigger = { trigger: next, start: "top bottom", end: `top ${top + STACK_STEP}px`, scrub: true };
-      gsap.to(card, { scale: STACK_REST_SCALE, ease: "none", transformOrigin: "center top", scrollTrigger });
-      gsap.to(card.querySelector("[data-stack-shade]"), { opacity: STACK_SHADE_OPACITY, ease: "none", scrollTrigger: { ...scrollTrigger } });
-    });
-    return () => {
-      for (const card of cards) {
-        card.style.minHeight = "";
-        card.style.removeProperty("--stick");
-      }
-    };
   });
 }
 
@@ -106,7 +74,6 @@ export function startScrollEffects() {
   const lenis = smoothScroll();
   fadeHeroOut();
   lightWordsOnScroll();
-  stackCards();
   drawTimeline();
   growContactTitle();
   speedMarqueeWithScroll(lenis);

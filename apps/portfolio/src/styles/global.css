@@ -475,8 +475,7 @@ a:hover > .arrow { translate: 3px 0; }
 
 /* Thẻ dự án: nền đặc, không kính mờ, để thẻ trên che hẳn thẻ dưới khi xếp chồng.
    Thẻ lùi ra sau thì tối đi nhờ lớp phủ, không hạ opacity của thẻ: hạ opacity là lộ thẻ nằm dưới. */
-.stack-card { background: var(--surface); box-shadow: 0 -24px 60px -36px rgb(0 0 0 / 0.55); }
-.stack-shade { position: absolute; inset: -1px; z-index: 2; border-radius: inherit; background: var(--background); opacity: 0; pointer-events: none; }
+.stack-card { background: var(--surface); }
 
 /* Dòng thời gian: đường dọc tô dần theo cuộn, chấm sáng lên khi tới mục đó. */
 .timeline { position: relative; padding-left: 1.75rem; }
@@ -524,9 +523,6 @@ a:hover > .arrow { translate: 3px 0; }
   [data-hero] { will-change: transform, opacity; }
   /* Lenis tự cuộn mượt; để trình duyệt cuộn mượt thêm lần nữa thì hai bên giành nhau. */
   html.lenis { scroll-behavior: auto; }
-  @media (min-width: 1024px) {
-    .has-scroll-fx .stack-card { position: sticky; top: var(--stick, 88px); will-change: transform; }
-  }
 
   .js [data-reveal]:not(.char-title) { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); transition-delay: var(--delay, 0ms); }
   .js [data-reveal]:not(.char-title).is-visible { opacity: 1; transform: none; }

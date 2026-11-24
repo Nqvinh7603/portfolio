@@ -122,8 +122,7 @@ const projectNames = content.projects.map((project) => project.name);
     featured.map((project, index) => {
       const href = localePath(locale, `/projects/${project.slug}/`);
       return (
-        <article data-stack-card data-spotlight class="stack-card grid items-center gap-6 rounded-3xl border border-border-strong p-5 sm:p-8 lg:grid-cols-12 lg:gap-12 lg:p-10">
-          <div data-stack-shade class="stack-shade" aria-hidden="true"></div>
+        <article data-spotlight class="stack-card grid items-center gap-6 rounded-3xl border border-border-strong p-5 sm:p-8 lg:grid-cols-12 lg:gap-12 lg:p-10">
           <div data-reveal class="grid gap-4 lg:col-span-5">
             <p class="flex items-baseline gap-2"><span class="accent w-fit text-4xl font-semibold tabular-nums">0{index + 1}</span><span class="text-sm text-muted">/ 0{featured.length}</span></p>
             <div class="grid gap-1">
