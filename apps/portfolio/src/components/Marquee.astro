@@ -2,7 +2,7 @@
 // Dải chữ chạy ngang. Bản `isOutline` là chữ rỗng cỡ lớn, chạy ngược chiều.
 type Props = { items?: string[]; isOutline?: boolean };
 
-const stack = ["Java 21", "Spring Boot", "Kafka", "PostgreSQL", "Redis", "AWS ECS Fargate", "Docker", "GitHub Actions", "ISO 20022", "HSM", "Linux"];
+const stack = ["Java 21", "Spring Boot", "Kafka", "PostgreSQL", "Redis", "AWS ECS Fargate", "Docker", "Nginx", "HSM", "Linux"];
 const { items = stack, isOutline = false } = Astro.props;
 const renderItems = [...items, ...items];
 ---

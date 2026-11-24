@@ -26,8 +26,8 @@ export const diagrams: Record<string, Diagram> = {
       { x: 230, y: 130, w: 200, h: 64, title: "API · green", sub: "new version" },
       { x: 530, y: 40, w: 170, h: 44, title: "Redis" },
       { x: 530, y: 100, w: 170, h: 44, title: "Database" },
-      { x: 20, y: 250, w: 150, h: 64, title: "GitHub Actions", sub: "builds the JAR" },
-      { x: 230, y: 250, w: 200, h: 64, title: "bg-switch", sub: "one deploy at a time" },
+      { x: 20, y: 250, w: 150, h: 64, title: "Docker Compose", sub: "dev · UAT · prod" },
+      { x: 230, y: 250, w: 200, h: 64, title: "Nginx switch", sub: "blue ↔ green" },
     ],
     edges: [
       { path: "M150 92H190V72H230", hasPacket: true },
@@ -38,7 +38,7 @@ export const diagrams: Record<string, Diagram> = {
     ],
     lanes: [
       { label: "Request", steps: [{ title: "Admin web", sub: "React" }, { title: "API · blue", sub: "live version", isKey: true }, { title: "Redis and database" }] },
-      { label: "Release", steps: [{ title: "GitHub Actions", sub: "builds the JAR" }, { title: "bg-switch", sub: "one deploy at a time" }, { title: "API · green", sub: "new version" }] },
+      { label: "Release", steps: [{ title: "Docker Compose", sub: "dev · UAT · prod" }, { title: "Nginx switch", sub: "blue ↔ green" }, { title: "API · green", sub: "new version" }] },
     ],
   },
   "s-space": {
@@ -71,34 +71,6 @@ export const diagrams: Record<string, Diagram> = {
     lanes: [
       { label: "Request", steps: [{ title: "Users" }, { title: "CloudFront", sub: "S3 static assets" }, { title: "ALB" }, { title: "ECS Fargate", sub: "auth · user · center", isKey: true }, { title: "RDS MySQL", sub: "Multi-AZ" }] },
       { label: "Release", steps: [{ title: "GitLab CI" }, { title: "ECR" }, { title: "ECS Fargate", isKey: true }] },
-    ],
-  },
-  "ach-gateway": {
-    title: "ACH Gateway inward-deposit flow",
-    width: 720,
-    height: 310,
-    groups: [],
-    labels: [{ x: 20, y: 24, text: "Interbank" }],
-    nodes: [
-      { x: 20, y: 50, w: 140, h: 64, title: "NAPAS ACH", sub: "ISO 20022" },
-      { x: 230, y: 50, w: 220, h: 64, title: "ACH Gateway", sub: "pacs.008 · camt.033", isKey: true },
-      { x: 540, y: 50, w: 160, h: 64, title: "Core Banking", sub: "APIs" },
-      { x: 230, y: 170, w: 100, h: 44, title: "SQL Server" },
-      { x: 350, y: 170, w: 100, h: 44, title: "Redis" },
-      { x: 230, y: 250, w: 220, h: 48, title: "Reconciliation", sub: "internal · NAPAS · Core" },
-    ],
-    edges: [
-      { path: "M160 82H230", hasPacket: true },
-      { path: "M450 82H540", hasPacket: true },
-      { path: "M290 114V170" },
-      { path: "M390 114V170" },
-      { path: "M280 214V250" },
-      { path: "M230 274H90V114", hasPacket: true },
-      { path: "M450 274H620V114", hasPacket: true },
-    ],
-    lanes: [
-      { label: "Interbank", steps: [{ title: "NAPAS ACH", sub: "ISO 20022" }, { title: "ACH Gateway", sub: "pacs.008 · camt.033", isKey: true }, { title: "Core Banking", sub: "APIs" }] },
-      { label: "Control", steps: [{ title: "Reconciliation", sub: "internal · NAPAS · Core" }] },
     ],
   },
   bitbuild: {
