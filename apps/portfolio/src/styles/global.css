@@ -431,6 +431,8 @@ a:hover > .arrow { translate: 3px 0; }
 
 /* Khối kính để địa cầu phía sau vẫn thấp thoáng. */
 .glass { background: color-mix(in srgb, var(--surface) 68%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+/* .glass nằm ngoài @layer nên đè mất hover:bg-* của Tailwind; nút kính tự khai nền rê ở đây. */
+a.glass:hover, button.glass:hover { background: var(--button-hover); }
 
 .btn-glow { background: linear-gradient(135deg, #5b5bf0, #7c3aed); color: #fff; box-shadow: 0 0 0 1px rgb(255 255 255 / 0.14) inset, 0 8px 28px -8px rgb(109 92 246 / 0.75); transition: box-shadow 0.25s, filter 0.25s, transform 0.2s ease-out; }
 .btn-glow:hover { filter: brightness(1.12); box-shadow: 0 0 0 1px rgb(255 255 255 / 0.22) inset, 0 10px 36px -6px rgb(109 92 246 / 0.95); }

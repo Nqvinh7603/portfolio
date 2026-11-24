@@ -9,7 +9,8 @@ type Props = { locale: Locale };
 const { locale } = Astro.props;
 const content = getContent(locale);
 const { experience } = content;
-const nameToSlug = new Map(content.projects.map((project) => [project.name, project.slug]));
+// Dòng công ty ghi tên ngắn ("Thinkware") nên tra cả theo slug.
+const nameToSlug = new Map(content.projects.flatMap((project) => [[project.name, project.slug], [project.slug, project.slug]]));
 ---
 
 <section class="grid gap-4 py-12 lg:py-16">
@@ -28,10 +29,10 @@ const nameToSlug = new Map(content.projects.map((project) => [project.name, proj
         </div>
         <div class="grid content-start gap-2">
           <p class="text-base leading-relaxed text-pretty text-muted">{job.note}</p>
-          <p class="flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted">
+          <p class="grid grid-cols-2 gap-x-3 gap-y-1 text-sm text-muted sm:flex sm:flex-wrap">
             {job.projects.split(" · ").map((name) => {
-              const slug = nameToSlug.get(name);
-              return slug ? <a class="inline-flex min-h-8 items-center underline decoration-foreground/30 underline-offset-4 hover:text-foreground" href={localePath(locale, `/projects/${slug}/`)}>{name}</a> : <span>{name}</span>;
+              const slug = nameToSlug.get(name) ?? nameToSlug.get(name.toLowerCase());
+              return slug ? <a class="inline-flex min-h-8 items-center underline decoration-foreground/30 underline-offset-4 hover:text-foreground" href={localePath(locale, `/projects/${slug}/`)}>{name}</a> : <span class="inline-flex min-h-8 items-center">{name}</span>;
             })}
           </p>
         </div>
